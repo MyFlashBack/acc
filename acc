@@ -1,0 +1,2849 @@
+<?php
+$account1=0;
+$CLAN_ID=0;
+define('API_URL1', 'https://api.worldoftanks.ru/');
+define('API_VERSION1', 'wot');
+define('CLANINFO_METHOD1', API_URL1.API_VERSION1.'/account/list/');
+define('APPLICATION_ID1', '21d5c63e0dee48aa41cf93a4e5');
+define('NAME', $_COOKIE['NIK']);
+$kin=$_COOKIE['NIK'];
+$ch1 = curl_init();
+curl_setopt($ch1, CURLOPT_URL, CLANINFO_METHOD1 . "?application_id=".APPLICATION_ID1."&search=".NAME."&limit=1");
+curl_setopt($ch1, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch1, CURLOPT_TIMEOUT, 60);
+$result1 = json_decode(curl_exec($ch1), true);
+if (curl_errno($ch1))
+{
+    echo "CURL returned error: ".curl_error($ch1)."\n";
+    die();
+}
+curl_close($ch1);
+if(empty($result1['status']) || $result1['status'] == 'error'){
+    foreach($result1['error'] as $key1 => $value1){
+        echo "  <b>{$key1}:</b> {$value1}<br/>";
+    }
+}else{
+    foreach($result1['data'] as $account1) {
+    }
+}
+usleep(50000);
+define('API_URL', 'https://api.worldoftanks.ru/');
+define('API_VERSION', 'wot');
+define('CLANINFO_METHOD', API_URL.API_VERSION.'/account/info/');
+define('APPLICATION_ID', '21d5c635a3a18aa41cf93a4e5');
+define('ID', $account1['account_id']);
+$id=$account1['account_id'];
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, CLANINFO_METHOD . "?application_id=".APPLICATION_ID."&account_id=".ID);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+$outcome = json_decode(curl_exec($ch), true);
+if (curl_errno($ch))
+{
+    echo "CURL returned error: ".curl_error($ch)."\n";
+    die();
+}
+curl_close($ch);
+?>
+<?php
+if(empty($outcome['status']) || $outcome['status'] == 'error'){
+    foreach($outcome['error'] as $key => $value){
+        echo "  <b>{$key}:</b> {$value}<br/>";
+    }
+}else{
+    foreach($outcome['data'] as $account) {
+        $CLAN_ID=$account['clan_id'];
+        $LR=$account['global_rating'];
+        if($account['statistics']['all']['battles']>0)
+        {
+        $ap=($account['statistics']['all']['wins'])/($account['statistics']['all']['battles'])*100;
+        }
+        if($account['statistics']['all']['battles']==0)
+        {
+         $ap=0;  
+        }
+        if($account['statistics']['all']['battles']>0)
+        {
+        $ap2=($account['statistics']['all']['damage_dealt'])/($account['statistics']['all']['battles']);
+        }
+        if($account['statistics']['all']['battles']==0)
+        {
+          $ap2=0;  
+        }
+        $PROCENT=round($ap,0,PHP_ROUND_HALF_UP);
+        $op=$account['statistics']['all']['battle_avg_xp'];
+        $battles=$account['statistics']['all']['battles'];
+        $uronG=round($ap2,0,PHP_ROUND_HALF_UP);
+    }
+}
+if($CLAN_ID<1)
+{$CLAN_ID=0;}
+$dolg=0;
+$CLAN_TEG=0;
+$EMBLEM=0;
+$color=0;
+usleep(50000);
+if($CLAN_ID>0){
+    define('API_URL2', 'https://api.worldoftanks.ru/');
+    define('API_VERSION2', 'wot');
+    define('CLANINFO_METHOD2', API_URL2.API_VERSION2.'/clans/info/');
+    define('APPLICATION_ID2', '21d5c635a3aaa41cf93a4e5');
+    define('IDCLAN', $CLAN_ID);
+    $ch2 = curl_init();
+    curl_setopt($ch2, CURLOPT_URL, CLANINFO_METHOD2 . "?application_id=".APPLICATION_ID2."&clan_id=".IDCLAN);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch2, CURLOPT_TIMEOUT, 60);
+    $outcomeC = json_decode(curl_exec($ch2), true);
+    if (curl_errno($ch2))
+    {
+        echo "CURL returned error: ".curl_error($ch2)."\n";
+        die();
+    }
+    curl_close($ch2);
+    if(empty($outcomeC['status']) || $outcomeC['status'] == 'error'){
+        foreach($outcomeC['error'] as $keyC => $valueC){
+            echo "  <b>{$keyC}:</b> {$valueC}<br/>";
+        }
+    }else{
+        foreach($outcomeC['data'] as $accountC) {
+            $CLAN_TEG=$accountC['tag'];
+            $EMBLEM=$accountC['emblems']['x64']['wot'];
+            $color=$accountC['color'];
+        }
+    }
+    usleep(50000);
+    define('API_URL4', 'https://api.worldoftanks.ru/');
+    define('API_VERSION4', 'wot');
+    define('CLANINFO_METHOD4', API_URL4.API_VERSION4.'/clans/accountinfo/');
+    define('APPLICATION_ID4', '21d5c635a8aa41cf93a4e5');
+    define('IDCLAN4', $account1['account_id']);
+    $ch2 = curl_init();
+    curl_setopt($ch2, CURLOPT_URL, CLANINFO_METHOD4 . "?application_id=".APPLICATION_ID4."&account_id=".IDCLAN4);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch2, CURLOPT_TIMEOUT, 60);
+    $outcomeC = json_decode(curl_exec($ch2), true);
+    if (curl_errno($ch2))
+    {
+        echo "CURL returned error: ".curl_error($ch2)."\n";
+        die();
+    }
+    curl_close($ch2);
+    if(empty($outcomeC['status']) || $outcomeC['status'] == 'error'){
+        foreach($outcomeC['error'] as $keyC => $valueC){
+            echo "  <b>{$keyC}:</b> {$valueC}<br/>";
+        }
+    }else{
+        foreach($outcomeC['data'] as $accountC) {
+            $dolg=$accountC['role_i18n'];
+
+        }
+    }
+}
+else{
+    $CLAN_TEG=0;
+}
+$balli=0;
+$tank_100lt=19201;
+$tank_100lt_Rvighil=0;
+$tank_100lt_Ruron=0;
+$tank_100lt_Rbatl=0;
+$tank_100lt_Rsvet=0;
+$tank_100lt_Rvighil1=0;
+$tank_100lt_Ruron1=0;
+$tank_100lt_Rbatl1=0;
+$tank_100lt_Rsvet1=0;
+$tank_100lt_NYvighil=0;
+$tank_100lt_NYuron=0;
+$tank_100lt_NYbatl=0;
+$tank_100lt_NYsvet=0;$tank_100lt_RE=0;$tank_100lt_NE=0;
+$tank_62=13825;
+$tank_62_Rvighil=0;
+$tank_62_Ruron=0;
+$tank_62_Rbatl=0;
+$tank_62_Rvighil1=0;
+$tank_62_Ruron1=0;
+$tank_62_Rbatl1=0;
+$tank_62_NYvighil=0;
+$tank_62_NYuron=0;
+$tank_62_NYbatl=0;$tank_62_RE=0;$tank_62_NE=0;
+$tank_907=15617;
+$tank_907_Rvighil=0;
+$tank_907_Ruron=0;
+$tank_907_Rbatl=0;
+$tank_907_Rvighil1=0;
+$tank_907_Ruron1=0;
+$tank_907_Rbatl1=0;
+$tank_907_NYvighil=0;
+$tank_907_NYuron=0;
+$tank_907_NYbatl=0;$tank_907_RE=0;$tank_907_NE=0;
+$tank_140=16897;
+$tank_140_Rvighil=0;
+$tank_140_Ruron=0;
+$tank_140_Rbatl=0;
+$tank_140_Rvighil1=0;
+$tank_140_Ruron1=0;
+$tank_140_Rbatl1=0;
+$tank_140_NYvighil=0;
+$tank_140_NYuron=0;
+$tank_140_NYbatl=0;$tank_140_RE=0;$tank_140_NE=0;
+$tank_430y=19969;
+$tank_430y_Rvighil=0;
+$tank_430y_Ruron=0;
+$tank_430y_Rbatl=0;
+$tank_430y_Rvighil1=0;
+$tank_430y_Ruron1=0;
+$tank_430y_Rbatl1=0;
+$tank_430y_NYvighil=0;
+$tank_430y_NYuron=0;
+$tank_430y_NYbatl=0;$tank_430y_RE=0;$tank_430y_NE=0;
+$tank_k91=21761;
+$tank_k91_Rvighil=0;
+$tank_k91_Ruron=0;
+$tank_k91_Rbatl=0;
+$tank_k91_Rvighil1=0;
+$tank_k91_Ruron1=0;
+$tank_k91_Rbatl1=0;
+$tank_k91_NYvighil=0;
+$tank_k91_NYuron=0;
+$tank_k91_NYbatl=0;$tank_k91_RE=0;$tank_k91_NE=0;
+$tank_t22=61697;
+$tank_t22_Rvighil=0;
+$tank_t22_Ruron=0;
+$tank_t22_Rbatl=0;
+$tank_t22_Rvighil1=0;
+$tank_t22_Ruron1=0;
+$tank_t22_Rbatl1=0;
+$tank_t22_NYvighil=0;
+$tank_t22_NYuron=0;
+$tank_t22_NYbatl=0;$tank_t22_RE=0;$tank_t22_NE=0;
+$tank_is4=6145;
+$tank_is4_Rvighil=0;
+$tank_is4_Ruron=0;
+$tank_is4_Rbatl=0;
+$tank_is4_Rvighil1=0;
+$tank_is4_Ruron1=0;
+$tank_is4_Rbatl1=0;
+$tank_is4_NYvighil=0;
+$tank_is4_NYuron=0;
+$tank_is4_NYbatl=0;$tank_is4_RE=0;$tank_is4_NE=0;
+$tank_is7=7169;
+$tank_is7_Rvighil=0;
+$tank_is7_Ruron=0;
+$tank_is7_Rbatl=0;
+$tank_is7_Rvighil1=0;
+$tank_is7_Ruron1=0;
+$tank_is7_Rbatl1=0;
+$tank_is7_NYvighil=0;
+$tank_is7_NYuron=0;
+$tank_is7_NYbatl=0;$tank_is7_RE=0;$tank_is7_NE=0;
+$tank_705a=20993;
+$tank_705a_Rvighil=0;
+$tank_705a_Ruron=0;
+$tank_705a_Rbatl=0;
+$tank_705a_Rvighil1=0;
+$tank_705a_Ruron1=0;
+$tank_705a_Rbatl1=0;
+$tank_705a_NYvighil=0;
+$tank_705a_NYuron=0;
+$tank_705a_NYbatl=0;$tank_705a_RE=0;$tank_705a_NE=0;
+$tank_277=22017;
+$tank_277_Rvighil=0;
+$tank_277_Ruron=0;
+$tank_277_Rbatl=0;
+$tank_277_Rvighil1=0;
+$tank_277_Ruron1=0;
+$tank_277_Rbatl1=0;
+$tank_277_NYvighil=0;
+$tank_277_NYuron=0;
+$tank_277_NYbatl=0;$tank_277_RE=0;$tank_277_NE=0;
+$tank_st2=22273;
+$tank_st2_Rvighil=0;
+$tank_st2_Ruron=0;
+$tank_st2_Rbatl=0;
+$tank_st2_Rvighil1=0;
+$tank_st2_Ruron1=0;
+$tank_st2_Rbatl1=0;
+$tank_st2_NYvighil=0;
+$tank_st2_NYuron=0;
+$tank_st2_NYbatl=0;$tank_st2_RE=0;$tank_st2t_NE=0;
+$tank_279=46849;
+$tank_279_Rvighil=0;
+$tank_279_Ruron=0;
+$tank_279_Rbatl=0;
+$tank_279_Rvighil1=0;
+$tank_279_Ruron1=0;
+$tank_279_Rbatl1=0;
+$tank_279_NYvighil=0;
+$tank_279_NYuron=0;
+$tank_279_NYbatl=0;$tank_279_RE=0;$tank_279_NE=0;
+$tank_260=58369;
+$tank_260_Rvighil=0;
+$tank_260_Ruron=0;
+$tank_260_Rbatl=0;
+$tank_260_Rvighil1=0;
+$tank_260_Ruron1=0;
+$tank_260_Rbatl1=0;
+$tank_260_NYvighil=0;
+$tank_260_NYuron=0;
+$tank_260_NYbatl=0;$tank_260_RE=0;$tank_260_NE=0;
+$tank_268=13569;
+$tank_268_Ruron=0;
+$tank_268_Rbatl=0;
+$tank_268_Ruron1=0;
+$tank_268_Rbatl1=0;
+$tank_268_NYuron=0;
+$tank_268_NYbatl=0;$tank_268_RE=0;$tank_268_NE=0;
+$tank_2684=20225;
+$tank_2684_Ruron=0;
+$tank_2684_Rbatl=0;
+$tank_2684_Ruron1=0;
+$tank_2684_Rbatl1=0;
+$tank_2684_NYuron=0;
+$tank_2684_NYbatl=0;$tank_2684_RE=0;$tank_2684_NE=0;
+$tank_261=8705;
+$tank_261_Ruron=0;
+$tank_261_Rbatl=0;
+$tank_261_Ruron1=0;
+$tank_261_Rbatl1=0;
+$tank_261_NYuron=0;
+$tank_261_NYbatl=0;$tank_261_RE=0;$tank_261_NE=0;
+$tank_rhm=19985;
+$tank_rhm_Rvighil=0;
+$tank_rhm_Ruron=0;
+$tank_rhm_Rbatl=0;
+$tank_rhm_Rsvet=0;
+$tank_rhm_Rvighil1=0;
+$tank_rhm_Ruron1=0;
+$tank_rhm_Rbatl1=0;
+$tank_rhm_Rsvet1=0;
+$tank_rhm_NYvighil=0;
+$tank_rhm_NYuron=0;
+$tank_rhm_NYbatl=0;
+$tank_rhm_NYsvet=0;$tank_rhm_RE=0;$tank_rhm_NE=0;
+$tank_e50=12305;
+$tank_e50_Rvighil=0;
+$tank_e50_Ruron=0;
+$tank_e50_Rbatl=0;
+$tank_e50_Rvighil1=0;
+$tank_e50_Ruron1=0;
+$tank_e50_Rbatl1=0;
+$tank_e50_NYvighil=0;
+$tank_e50_NYuron=0;
+$tank_e50_NYbatl=0;$tank_e50_RE=0;$tank_e50_NE=0;
+$tank_leopard=14609;
+$tank_leopard_Rvighil=0;
+$tank_leopard_Ruron=0;
+$tank_leopard_Rbatl=0;
+$tank_leopard_Rvighil1=0;
+$tank_leopard_Ruron1=0;
+$tank_leopard_Rbatl1=0;
+$tank_leopard_NYvighil=0;
+$tank_leopard_NYuron=0;
+$tank_leopard_NYbatl=0;$tank_leopard_RE=0;$tank_leopard_NE=0;
+$tank_maus=6929;
+$tank_maus_Rvighil=0;
+$tank_maus_Ruron=0;
+$tank_maus_Rbatl=0;
+$tank_maus_Rvighil1=0;
+$tank_maus_Ruron1=0;
+$tank_maus_Rbatl1=0;
+$tank_maus_NYvighil=0;
+$tank_maus_NYuron=0;
+$tank_maus_NYbatl=0;$tank_maus_RE=0;$tank_maus_NE=0;
+$tank_e100=9489;
+$tank_e100_Rvighil=0;
+$tank_e100_Ruron=0;
+$tank_e100_Rbatl=0;
+$tank_e100_Rvighil1=0;
+$tank_e100_Ruron1=0;
+$tank_e100_Rbatl1=0;
+$tank_e100_NYvighil=0;
+$tank_e100_NYuron=0;
+$tank_e100_NYbatl=0;$tank_e100_RE=0;$tank_e100_NE=0;
+$tank_PZ=19473;
+$tank_PZ_Rvighil=0;
+$tank_PZ_Ruron=0;
+$tank_PZ_Rbatl=0;
+$tank_PZ_Rvighil1=0;
+$tank_PZ_Ruron1=0;
+$tank_PZ_Rbatl1=0;
+$tank_PZ_NYvighil=0;
+$tank_PZ_NYuron=0;
+$tank_PZ_NYbatl=0;$tank_PZ_RE=0;$tank_PZ_NE=0;
+$tank_vk72=58641;
+$tank_vk72_Rvighil=0;
+$tank_vk72_Ruron=0;
+$tank_vk72_Rbatl=0;
+$tank_vk72_Rvighil1=0;
+$tank_vk72_Ruron1=0;
+$tank_vk72_Rbatl1=0;
+$tank_vk72_NYvighil=0;
+$tank_vk72_NYuron=0;
+$tank_vk72_NYbatl=0;$tank_vk72_RE=0;$tank_vk72_NE=0;
+$tank_jgE100=12049;
+$tank_jgE100_Ruron=0;
+$tank_jgE100_Rbatl=0;
+$tank_jgE100_Ruron1=0;
+$tank_jgE100_Rbatl1=0;
+$tank_jgE100_NYuron=0;
+$tank_jgE100_NYbatl=0;$tank_jgE100_RE=0;$tank_jgE100_NE=0;
+$tank_gril=19217;
+$tank_gril_Ruron=0;
+$tank_gril_Rbatl=0;
+$tank_gril_Ruron1=0;
+$tank_gril_Rbatl1=0;
+$tank_gril_NYuron=0;
+$tank_gril_NYbatl=0;$tank_gril_RE=0;$tank_gril_NE=0;
+$tank_gwe=9233;
+$tank_gwe_Ruron=0;
+$tank_gwe_Rbatl=0;
+$tank_gwe_Ruron1=0;
+$tank_gwe_Rbatl1=0;
+$tank_gwe_NYuron=0;
+$tank_gwe_NYbatl=0;$tank_gwe_RE=0;$tank_gwe_NE=0;
+$tank_sheridan=19489;
+$tank_sheridan_Rvighil=0;
+$tank_sheridan_Ruron=0;
+$tank_sheridan_Rbatl=0;
+$tank_sheridan_Rsvet=0;
+$tank_sheridan_Rvighil1=0;
+$tank_sheridan_Ruron1=0;
+$tank_sheridan_Rbatl1=0;
+$tank_sheridan_Rsvet1=0;
+$tank_sheridan_NYvighil=0;
+$tank_sheridan_NYuron=0;
+$tank_sheridan_NYbatl=0;
+$tank_sheridan_NYsvet=0;$tank_sheridan_RE=0;$tank_sheridan_NE=0;
+$tank_patton=14113;
+$tank_patton_Rvighil=0;
+$tank_patton_Ruron=0;
+$tank_patton_Rbatl=0;
+$tank_patton_Rvighil1=0;
+$tank_patton_Ruron1=0;
+$tank_patton_Rbatl1=0;
+$tank_patton_NYvighil=0;
+$tank_patton_NYuron=0;
+$tank_patton_NYbatl=0;$tank_patton_RE=0;$tank_patton_NE=0;
+$tank_m60=15905;
+$tank_m60_Rvighil=0;
+$tank_m60_Ruron=0;
+$tank_m60_Rbatl=0;
+$tank_m60_Rvighil1=0;
+$tank_m60_Ruron1=0;
+$tank_m60_Rbatl1=0;
+$tank_m60_NYvighil=0;
+$tank_m60_NYuron=0;
+$tank_m60_NYbatl=0;$tank_m60_RE=0;$tank_m60_NE=0;
+$tank_t95e6=55841;
+$tank_t95e6_Rvighil=0;
+$tank_t95e6_Ruron=0;
+$tank_t95e6_Rbatl=0;
+$tank_t95e6_Rvighil1=0;
+$tank_t95e6_Ruron1=0;
+$tank_t95e6_Rbatl1=0;
+$tank_t95e6_NYvighil=0;
+$tank_t95e6_NYuron=0;
+$tank_t95e6_NYbatl=0;$tank_t95e6_RE=0;$tank_t95e6_NE=0;
+$tank_e5=10785;
+$tank_e5_Rvighil=0;
+$tank_e5_Ruron=0;
+$tank_e5_Rbatl=0;
+$tank_e5_Rvighil1=0;
+$tank_e5_Ruron1=0;
+$tank_e5_Rbatl1=0;
+$tank_e5_NYvighil=0;
+$tank_e5_NYuron=0;
+$tank_e5_NYbatl=0;$tank_e5_RE=0;$tank_e5_NE=0;
+$tank_t57heavy=14881;
+$tank_t57heavy_Rvighil=0;
+$tank_t57heavy_Ruron=0;
+$tank_t57heavy_Rbatl=0;
+$tank_t57heavy_Rvighil1=0;
+$tank_t57heavy_Ruron1=0;
+$tank_t57heavy_Rbatl1=0;
+$tank_t57heavy_NYvighil=0;
+$tank_t57heavy_NYuron=0;
+$tank_t57heavy_NYbatl=0;$tank_t57heavy_RE=0;$tank_t57heavy_NE=0;
+$tank_e4=13089;
+$tank_e4_Ruron=0;
+$tank_e4_Rbatl=0;
+$tank_e4_Ruron1=0;
+$tank_e4_Rbatl1=0;
+$tank_e4_NYuron=0;
+$tank_e4_NYbatl=0;$tank_e4_RE=0;$tank_e4_NE=0;
+$tank_e3=13857;
+$tank_e3_Ruron=0;
+$tank_e3_Rbatl=0;
+$tank_e3_Ruron1=0;
+$tank_e3_Rbatl1=0;
+$tank_e3_NYuron=0;
+$tank_e3_NYbatl=0;$tank_e3_RE=0;$tank_e3_NE=0;
+$tank_t92=8481;
+$tank_t92_Ruron=0;
+$tank_t92_Rbatl=0;
+$tank_t92_Ruron1=0;
+$tank_t92_Rbatl1=0;
+$tank_t92_NYuron=0;
+$tank_t92_NYbatl=0;$tank_t92_RE=0;$tank_t92_NE=0;
+$tank_wz1321=5937;
+$tank_wz1321_Rvighil=0;
+$tank_wz1321_Ruron=0;
+$tank_wz1321_Rbatl=0;
+$tank_wz1321_Rsvet=0;
+$tank_wz1321_Rvighil1=0;
+$tank_wz1321_Ruron1=0;
+$tank_wz1321_Rbatl1=0;
+$tank_wz1321_Rsvet1=0;
+$tank_wz1321_NYvighil=0;
+$tank_wz1321_NYuron=0;
+$tank_wz1321_NYbatl=0;
+$tank_wz1321_NYsvet=0;$tank_wz1321_RE=0;$tank_wz1321_NE=0;
+$tank_121=4145;
+$tank_121_Rvighil=0;
+$tank_121_Ruron=0;
+$tank_121_Rbatl=0;
+$tank_121_Rvighil1=0;
+$tank_121_Ruron1=0;
+$tank_121_Rbatl1=0;
+$tank_121_NYvighil=0;
+$tank_121_NYuron=0;
+$tank_121_NYbatl=0;$tank_121_RE=0;$tank_121_NE=0;
+$tank_121b=63537;
+$tank_121b_Rvighil=0;
+$tank_121b_Ruron=0;
+$tank_121b_Rbatl=0;
+$tank_121b_Rvighil1=0;
+$tank_121b_Ruron1=0;
+$tank_121b_Rbatl1=0;
+$tank_121b_NYvighil=0;
+$tank_121b_NYuron=0;
+$tank_121b_NYbatl=0;$tank_121b_RE=0;$tank_121b_NE=0;
+$tank_113=5425;
+$tank_113_Rvighil=0;
+$tank_113_Ruron=0;
+$tank_113_Rbatl=0;
+$tank_113_Rvighil1=0;
+$tank_113_Ruron1=0;
+$tank_113_Rbatl1=0;
+$tank_113_NYvighil=0;
+$tank_113_NYuron=0;
+$tank_113_NYbatl=0;$tank_113_RE=0;$tank_113_NE=0;
+$tank_wz111a=6193;
+$tank_wz111a_Rvighil=0;
+$tank_wz111a_Ruron=0;
+$tank_wz111a_Rbatl=0;
+$tank_wz111a_Rvighil1=0;
+$tank_wz111a_Ruron1=0;
+$tank_wz111a_Rbatl1=0;
+$tank_wz111a_NYvighil=0;
+$tank_wz111a_NYuron=0;
+$tank_wz111a_NYbatl=0;$tank_wz111a_RE=0;$tank_wz111a_NE=0;
+$tank_wz113=8497;
+$tank_wz113_Ruron=0;
+$tank_wz113_Rbatl=0;
+$tank_wz113_Ruron1=0;
+$tank_wz113_Rbatl1=0;
+$tank_wz113_NYuron=0;
+$tank_wz113_NYbatl=0;$tank_wz113_RE=0;$tank_wz113_NE=0;
+$tank_13105=17217;
+$tank_13105_Rvighil=0;
+$tank_13105_Ruron=0;
+$tank_13105_Rbatl=0;
+$tank_13105_Rsvet=0;
+$tank_13105_Rvighil1=0;
+$tank_13105_Ruron1=0;
+$tank_13105_Rbatl1=0;
+$tank_13105_Rsvet1=0;
+$tank_13105_NYvighil=0;
+$tank_13105_NYuron=0;
+$tank_13105_NYbatl=0;
+$tank_13105_NYsvet=0;$tank_13105_RE=0;$tank_13105_NE=0;
+$tank_ebr=19009;
+$tank_ebr_Rvighil=0;
+$tank_ebr_Ruron=0;
+$tank_ebr_Rbatl=0;
+$tank_ebr_Rsvet=0;
+$tank_ebr_Rvighil1=0;
+$tank_ebr_Ruron1=0;
+$tank_ebr_Rbatl1=0;
+$tank_ebr_Rsvet1=0;
+$tank_ebr_NYvighil=0;
+$tank_ebr_NYuron=0;
+$tank_ebr_NYbatl=0;
+$tank_ebr_NYsvet=0;$tank_ebr_RE=0;$tank_ebr_NE=0;
+$tank_bat25=3649;
+$tank_bat25_Rvighil=0;
+$tank_bat25_Ruron=0;
+$tank_bat25_Rbatl=0;
+$tank_bat25_Rvighil1=0;
+$tank_bat25_Ruron1=0;
+$tank_bat25_Rbatl1=0;
+$tank_bat25_NYvighil=0;
+$tank_bat25_NYuron=0;
+$tank_bat25_NYbatl=0;$tank_bat25_RE=0;$tank_bat25_NE=0;
+$tank_30b=15425;
+$tank_30b_Rvighil=0;
+$tank_30b_Ruron=0;
+$tank_30b_Rbatl=0;
+$tank_30b_Rvighil1=0;
+$tank_30b_Ruron1=0;
+$tank_30b_Rbatl1=0;
+$tank_30b_NYvighil=0;
+$tank_30b_NYuron=0;
+$tank_30b_NYbatl=0;$tank_30b_RE=0;$tank_30b_NE=0;
+$tank_50b=6209;
+$tank_50b_Rvighil=0;
+$tank_50b_Ruron=0;
+$tank_50b_Rbatl=0;
+$tank_50b_Rvighil1=0;
+$tank_50b_Ruron1=0;
+$tank_50b_Rbatl1=0;
+$tank_50b_NYvighil=0;
+$tank_50b_NYuron=0;
+$tank_50b_NYbatl=0;$tank_50b_RE=0;$tank_50b_NE=0;
+$tank_amxm4=16961;
+$tank_amxm4_Rvighil=0;
+$tank_amxm4_Ruron=0;
+$tank_amxm4_Rbatl=0;
+$tank_amxm4_Rvighil1=0;
+$tank_amxm4_Ruron1=0;
+$tank_amxm4_Rbatl1=0;
+$tank_amxm4_NYvighil=0;
+$tank_amxm4_NYuron=0;
+$tank_amxm4_NYbatl=0;$tank_amxm4_RE=0;$tank_amxm4_NE=0;
+$tank_50foch=13889;
+$tank_50foch_Ruron=0;
+$tank_50foch_Rbatl=0;
+$tank_50foch_Ruron1=0;
+$tank_50foch_Rbatl1=0;
+$tank_50foch_NYuron=0;
+$tank_50foch_NYbatl=0;$tank_50foch_RE=0;$tank_50foch_NE=0;
+$tank_50fochB=17729;
+$tank_50fochB_Ruron=0;
+$tank_50fochB_Rbatl=0;
+$tank_50fochB_Ruron1=0;
+$tank_50fochB_Rbatl1=0;
+$tank_50fochB_NYuron=0;
+$tank_50fochB_NYbatl=0;$tank_50fochB_RE=0;$tank_50fochB_NE=0;
+$tank_Bat155=11841;
+$tank_Bat155_Ruron=0;
+$tank_Bat155_Rbatl=0;
+$tank_Bat155_Ruron1=0;
+$tank_Bat155_Rbatl1=0;
+$tank_Bat155_NYuron=0;
+$tank_Bat155_NYbatl=0;$tank_Bat155_RE=0;$tank_Bat155_NE=0;
+$tank_manticor=58961;
+$tank_manticor_Rvighil=0;
+$tank_manticor_Ruron=0;
+$tank_manticor_Rbatl=0;
+$tank_manticor_Rsvet=0;
+$tank_manticor_Rvighil1=0;
+$tank_manticor_Ruron1=0;
+$tank_manticor_Rbatl1=0;
+$tank_manticor_Rsvet1=0;
+$tank_manticor_NYvighil=0;
+$tank_manticor_NYuron=0;
+$tank_manticor_NYbatl=0;
+$tank_manticor_NYsvet=0;$tank_manticor_RE=0;$tank_manticor_NE=0;
+$tank_centruion=7249;
+$tank_centruion_Rvighil=0;
+$tank_centruion_Ruron=0;
+$tank_centruion_Rbatl=0;
+$tank_centruion_Rvighil1=0;
+$tank_centruion_Ruron1=0;
+$tank_centruion_Rbatl1=0;
+$tank_centruion_NYvighil=0;
+$tank_centruion_NYuron=0;
+$tank_centruion_NYbatl=0;$tank_centruion_RE=0;$tank_centruion_NE=0;
+$tank_fv215b=6225;
+$tank_fv215b_Rvighil=0;
+$tank_fv215b_Ruron=0;
+$tank_fv215b_Rbatl=0;
+$tank_fv215b_Rvighil1=0;
+$tank_fv215b_Ruron1=0;
+$tank_fv215b_Rbatl1=0;
+$tank_fv215b_NYvighil=0;
+$tank_fv215b_NYuron=0;
+$tank_fv215b_NYbatl=0;$tank_fv215b_RE=0;$tank_fv215b_NE=0;
+$tank_SuperConq=15697;
+$tank_SuperConq_Rvighil=0;
+$tank_SuperConq_Ruron=0;
+$tank_SuperConq_Rbatl=0;
+$tank_SuperConq_Rvighil1=0;
+$tank_SuperConq_Ruron1=0;
+$tank_SuperConq_Rbatl1=0;
+$tank_SuperConq_NYvighil=0;
+$tank_SuperConq_NYuron=0;
+$tank_SuperConq_NYbatl=0;$tank_SuperConq_RE=0;$tank_SuperConq_NE=0;
+$tank_t95fv4201=57937;
+$tank_t95fv4201_Rvighil=0;
+$tank_t95fv4201_Ruron=0;
+$tank_t95fv4201_Rbatl=0;
+$tank_t95fv4201_Rvighil1=0;
+$tank_t95fv4201_Ruron1=0;
+$tank_t95fv4201_Rbatl1=0;
+$tank_t95fv4201_NYvighil=0;
+$tank_t95fv4201_NYuron=0;
+$tank_t95fv4201_NYbatl=0;$tank_t95fv4201_RE=0;$tank_t95fv4201_NE=0;
+$tank_fv215b183=9297;
+$tank_fv215b183_Ruron=0;
+$tank_fv215b183_Rbatl=0;
+$tank_fv215b183_Ruron1=0;
+$tank_fv215b183_Rbatl1=0;
+$tank_fv215b183_NYuron=0;
+$tank_fv215b183_NYbatl=0;$tank_fv215b183_RE=0;$tank_fv215b183_NE=0;
+$tank_fv4005=13905;
+$tank_fv4005_Ruron=0;
+$tank_fv4005_Rbatl=0;
+$tank_fv4005_Ruron1=0;
+$tank_fv4005_Rbatl1=0;
+$tank_fv4005_NYuron=0;
+$tank_fv4005_NYbatl=0;$tank_fv4005_RE=0;$tank_fv4005_NE=0;
+$tank_fv217badger=15953;
+$tank_fv217badger_Ruron=0;
+$tank_fv217badger_Rbatl=0;
+$tank_fv217badger_Ruron1=0;
+$tank_fv217badger_Rbatl1=0;
+$tank_fv217badger_NYuron=0;
+$tank_fv217badger_NYbatl=0;$tank_fv217badger_RE=0;$tank_fv217badger_NE=0;
+$tank_Conq=12369;
+$tank_Conq_Ruron=0;
+$tank_Conq_Rbatl=0;
+$tank_Conq_Ruron1=0;
+$tank_Conq_Rbatl1=0;
+$tank_Conq_NYuron=0;
+$tank_Conq_NYbatl=0;$tank_Conq_RE=0;$tank_Conq_NE=0;
+$tank_stb1=3681;
+$tank_stb1_Rvighil=0;
+$tank_stb1_Ruron=0;
+$tank_stb1_Rbatl=0;
+$tank_stb1_Rvighil1=0;
+$tank_stb1_Ruron1=0;
+$tank_stb1_Rbatl1=0;
+$tank_stb1_NYvighil=0;
+$tank_stb1_NYuron=0;
+$tank_stb1_NYbatl=0;$tank_stb1_RE=0;$tank_stb1_NE=0;
+$tank_type5heavy=3937;
+$tank_type5heavy_Rvighil=0;
+$tank_type5heavy_Ruron=0;
+$tank_type5heavy_Rbatl=0;
+$tank_type5heavy_Rvighil1=0;
+$tank_type5heavy_Ruron1=0;
+$tank_type5heavy_Rbatl1=0;
+$tank_type5heavy_NYvighil=0;
+$tank_type5heavy_NYuron=0;
+$tank_type5heavy_NYbatl=0;$tank_type5heavy_RE=0;$tank_type5heavy_NE=0;
+$tank_tvp=2417;
+$tank_tvp_Rvighil=0;
+$tank_tvp_Ruron=0;
+$tank_tvp_Rbatl=0;
+$tank_tvp_Rvighil1=0;
+$tank_tvp_Ruron1=0;
+$tank_tvp_Rbatl1=0;
+$tank_tvp_NYvighil=0;
+$tank_tvp_NYuron=0;
+$tank_tvp_NYbatl=0;$tank_tvp_RE=0;$tank_tvp_NE=0;
+$tank_vz55=2929;
+$tank_vz55_Rvighil=0;
+$tank_vz55_Ruron=0;
+$tank_vz55_Rbatl=0;
+$tank_vz55_Rvighil1=0;
+$tank_vz55_Ruron1=0;
+$tank_vz55_Rbatl1=0;
+$tank_vz55_NYvighil=0;
+$tank_vz55_NYuron=0;
+$tank_vz55_NYbatl=0;$tank_vz55_RE=0;$tank_vz55_NE=0;
+$tank_udes1516=5505;
+$tank_udes1516_Rvighil=0;
+$tank_udes1516_Ruron=0;
+$tank_udes1516_Rbatl=0;
+$tank_udes1516_Rvighil1=0;
+$tank_udes1516_Ruron1=0;
+$tank_udes1516_Rbatl1=0;
+$tank_udes1516_NYvighil=0;
+$tank_udes1516_NYuron=0;
+$tank_udes1516_NYbatl=0;$tank_udes1516_RE=0;$tank_udes1516_NE=0;
+$tank_kran=2433;
+$tank_kran_Rvighil=0;
+$tank_kran_Ruron=0;
+$tank_kran_Rbatl=0;
+$tank_kran_Rvighil1=0;
+$tank_kran_Ruron1=0;
+$tank_kran_Rbatl1=0;
+$tank_kran_NYvighil=0;
+$tank_kran_NYuron=0;
+$tank_kran_NYbatl=0;$tank_kran_RE=0;$tank_kran_NE=0;
+$tank_strv=4737;
+$tank_strv_Ruron=0;
+$tank_strv_Rbatl=0;
+$tank_strv_Ruron1=0;
+$tank_strv_Rbatl1=0;
+$tank_strv_NYuron=0;
+$tank_strv_NYbatl=0;$tank_strv_RE=0;$tank_strv_NE=0;
+$tank_cs63=5265;
+$tank_cs63_Rvighil=0;
+$tank_cs63_Ruron=0;
+$tank_cs63_Rbatl=0;
+$tank_cs63_Rvighil1=0;
+$tank_cs63_Ruron1=0;
+$tank_cs63_Rbatl1=0;
+$tank_cs63_NYvighil=0;
+$tank_cs63_NYuron=0;
+$tank_cs63_NYbatl=0;$tank_cs63_RE=0;$tank_cs63_NE=0;
+$tank_60tp=3473;
+$tank_60tp_Rvighil=0;
+$tank_60tp_Ruron=0;
+$tank_60tp_Rbatl=0;
+$tank_60tp_Rvighil1=0;
+$tank_60tp_Ruron1=0;
+$tank_60tp_Rbatl1=0;
+$tank_60tp_NYvighil=0;
+$tank_60tp_NYuron=0;
+$tank_60tp_NYbatl=0;$tank_60tp_RE=0;$tank_60tp_NE=0;
+$tank_progetto=2721;
+$tank_progetto_Rvighil=0;
+$tank_progetto_Ruron=0;
+$tank_progetto_Rbatl=0;
+$tank_progetto_Rvighil1=0;
+$tank_progetto_Ruron1=0;
+$tank_progetto_Rbatl1=0;
+$tank_progetto_NYvighil=0;
+$tank_progetto_NYuron=0;
+$tank_progetto_NYbatl=0;$tank_progetto_RE=0;$tank_progetto_NE=0;
+$tank_carro=50849;
+$tank_carro_Rvighil=0;
+$tank_carro_Ruron=0;
+$tank_carro_Rbatl=0;
+$tank_carro_Rvighil1=0;
+$tank_carro_Ruron1=0;
+$tank_carro_Rbatl1=0;
+$tank_carro_NYvighil=0;
+$tank_carro_NYuron=0;
+$tank_carro_NYbatl=0;$tank_carro_RE=0;$tank_carro_NE=0;
+$tank_RINOCERONTE=2977;
+$tank_RINOCERONTE_Rvighil=0;
+$tank_RINOCERONTE_Ruron=0;
+$tank_RINOCERONTE_Rbatl=0;
+$tank_RINOCERONTE_Rvighil1=0;
+$tank_RINOCERONTE_Ruron1=0;
+$tank_RINOCERONTE_Rbatl1=0;
+$tank_RINOCERONTE_NYvighil=0;
+$tank_RINOCERONTE_NYuron=0;
+$tank_RINOCERONTE_NYbatl=0;$tank_RINOCERONTE_RE=0;$tank_RINOCERONTE_NE=0;
+$tankkkLT=array(777777,19201,19985,19489,5937,17217,19009,58961);
+$tankkkST=array(777777,13825,15617,19969,16897,21761,61697,12305,14609,14113,15905,55841,4145,63537,3649,15425,7249,3681,2417,5505,5265,2721,50849);
+$tankkkTT=array(777777,46849,6145,7169,20993,22017,22273,58369,6929,9489,19473,58641,10785,14881,5425,6193,6209,16961,6225,15697,57937,3937,2433,3473,2977,2929);
+$tankkkPT=array(777777,13569,20225,12049,19217,13089,13857,8497,13889,17729,9297,13905,15953,4737);
+$tankkkSAU=array(777777,8705,9233,8481,11841,12369);
+define('API_URL5', 'https://api.worldoftanks.ru/');
+define('API_VERSION5', 'wot');
+define('CLANINFO_METHOD5', API_URL5.API_VERSION5.'/tanks/stats/');
+define('APPLICATION_ID5', '21d5c635a3a1fe0dee48aa41cf93a4e5');
+define('ID5', $account1['account_id']);
+$ID_AC5=$account1['account_id'];
+$ch5 = curl_init();
+curl_setopt($ch5, CURLOPT_URL, CLANINFO_METHOD5 . "?application_id=".APPLICATION_ID5."&account_id=".ID5);
+curl_setopt($ch5, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch5, CURLOPT_TIMEOUT, 60);
+$outcome5 = json_decode(curl_exec($ch5), true);
+if (curl_errno($ch5))
+{
+    echo "CURL returned error: ".curl_error($ch5)."\n";
+    die();
+}
+curl_close($ch5);
+if(empty($outcome5['status']) || $outcome5['status'] == 'error'){
+    foreach($outcome5['error'] as $key5 => $value5){
+        echo "  <b>{$key5}:</b> {$value5}<br/>";
+    }
+}else{
+    foreach($outcome5['data'] as $account5) {
+        for ($i = 0; $i <= 1000; $i++) {
+            if(array_search ($account5[$i]['tank_id'], $tankkkLT)==true) {
+                if($account5[$i]['tank_id']==$tank_100lt) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_100lt_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_100lt_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_100lt_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_100lt_Rsvet1=round(($account5[$i]['all']['spotted'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_100lt_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_100lt_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_100lt_Rbatl = $account5[$i]['all']['battles'];
+                        $tank_100lt_Rsvet=$account5[$i]['all']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_100lt_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_100lt_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_100lt_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                        $tank_100lt_Nsvet = $account5[$i]['stronghold_defense']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_100lt_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_100lt_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_100lt_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                        $tank_100lt_Ysvet = $account5[$i]['stronghold_skirmish']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_100lt_NYbatl = $tank_100lt_Nbatl + $tank_100lt_Ybatl;
+                        $tank_100lt_NYvighil = round((($tank_100lt_Nvighil + $tank_100lt_Yvighil )/ $tank_100lt_NYbatl) * 100, 0, PHP_ROUND_HALF_UP);
+                        $tank_100lt_NYuron = round((($tank_100lt_Nuron + $tank_100lt_Yuron )/ $tank_100lt_NYbatl), 0, PHP_ROUND_HALF_UP);
+                        $tank_100lt_NYsvet = round((($tank_100lt_Nsvet + $tank_100lt_Ysvet )/ $tank_100lt_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_rhm) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_rhm_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_rhm_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_rhm_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_rhm_Rsvet1=round(($account5[$i]['all']['spotted'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_rhm_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_rhm_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_rhm_Rsvet=$account5[$i]['all']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_rhm_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_rhm_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_rhm_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                        $tank_rhm_Nsvet = $account5[$i]['stronghold_defense']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_rhm_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_rhm_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_rhm_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                        $tank_rhm_Ysvet = $account5[$i]['stronghold_skirmish']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_rhm_NYbatl = $tank_rhm_Nbatl+ $tank_rhm_Ybatl;
+                        $tank_rhm_NYvighil = round((($tank_rhm_Nvighil+$tank_rhm_Yvighil )/ $tank_rhm_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_rhm_NYuron =  round((($tank_rhm_Nuron+$tank_rhm_Yuron )/ $tank_rhm_NYbatl),0,PHP_ROUND_HALF_UP);
+                        $tank_rhm_NYsvet = round((($tank_rhm_Nsvet + $tank_rhm_Ysvet )/ $tank_rhm_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_sheridan) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_sheridan_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_sheridan_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_sheridan_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_sheridan_Rsvet1=round(($account5[$i]['all']['spotted'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_sheridan_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_sheridan_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_sheridan_Rbatl = $account5[$i]['all']['battles'];
+                        $tank_sheridan_Rsvet=$account5[$i]['all']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_sheridan_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_sheridan_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_sheridan_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                        $tank_sheridan_Nsvet = $account5[$i]['stronghold_defense']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_sheridan_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_sheridan_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_sheridan_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                        $tank_sheridan_Ysvet = $account5[$i]['stronghold_skirmish']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_sheridan_NYbatl = $tank_sheridan_Nbatl+ $tank_sheridan_Ybatl;
+                        $tank_sheridan_NYvighil = round((($tank_sheridan_Nvighil+$tank_sheridan_Yvighil )/ $tank_sheridan_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_sheridan_NYuron =  round((($tank_sheridan_Nuron+$tank_sheridan_Yuron )/ $tank_sheridan_NYbatl),0,PHP_ROUND_HALF_UP);
+                        $tank_sheridan_NYsvet = round((($tank_sheridan_Nsvet + $tank_sheridan_Ysvet )/ $tank_sheridan_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_wz1321) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_wz1321_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_wz1321_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_wz1321_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_wz1321_Rsvet1=round(($account5[$i]['all']['spotted'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_wz1321_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_wz1321_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_wz1321_Rbatl = $account5[$i]['all']['battles'];
+                        $tank_wz1321_Rsvet=$account5[$i]['all']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_wz1321_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_wz1321_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_wz1321_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                        $tank_wz1321_Nsvet = $account5[$i]['stronghold_defense']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_wz1321_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_wz1321_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_wz1321_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                        $tank_wz1321_Ysvet = $account5[$i]['stronghold_skirmish']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_wz1321_NYbatl = $tank_wz1321_Nbatl+ $tank_wz1321_Ybatl;
+                        $tank_wz1321_NYvighil = round((($tank_wz1321_Nvighil+$tank_wz1321_Yvighil )/ $tank_wz1321_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_wz1321_NYuron =  round((($tank_wz1321_Nuron+$tank_wz1321_Yuron )/ $tank_wz1321_NYbatl),0,PHP_ROUND_HALF_UP);
+                        $tank_wz1321_NYsvet = round((($tank_wz1321_Nsvet + $tank_wz1321_Ysvet )/ $tank_wz1321_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_13105) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_13105_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_13105_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_13105_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_13105_Rsvet1=round(($account5[$i]['all']['spotted'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_13105_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_13105_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_13105_Rbatl = $account5[$i]['all']['battles'];
+                        $tank_13105_Rsvet=$account5[$i]['all']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_13105_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_13105_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_13105_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                        $tank_13105_Nsvet = $account5[$i]['stronghold_defense']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_13105_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_13105_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_13105_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                        $tank_13105_Ysvet = $account5[$i]['stronghold_skirmish']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_13105_NYbatl = $tank_13105_Nbatl+ $tank_13105_Ybatl;
+                        $tank_13105_NYvighil = round((($tank_13105_Nvighil+$tank_13105_Yvighil )/ $tank_13105_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_13105_NYuron = round((( $tank_13105_Nuron+$tank_13105_Yuron )/ $tank_13105_NYbatl),0,PHP_ROUND_HALF_UP);
+                        $tank_13105_NYsvet = round((($tank_13105_Nsvet + $tank_13105_Ysvet )/ $tank_13105_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_ebr) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_ebr_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_ebr_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_ebr_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_ebr_Rsvet1=round(($account5[$i]['all']['spotted'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_ebr_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_ebr_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_ebr_Rbatl = $account5[$i]['all']['battles'];
+                        $tank_ebr_Rsvet=$account5[$i]['all']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_ebr_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_ebr_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_ebr_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                        $tank_ebr_Nsvet = $account5[$i]['stronghold_defense']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_ebr_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_ebr_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_ebr_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                        $tank_ebr_Ysvet = $account5[$i]['stronghold_skirmish']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_ebr_NYbatl = $tank_ebr_Nbatl+ $tank_ebr_Ybatl;
+                        $tank_ebr_NYvighil = round((($tank_ebr_Nvighil+$tank_ebr_Yvighil )/ $tank_ebr_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_ebr_NYuron =  round((($tank_ebr_Nuron+$tank_ebr_Yuron )/ $tank_ebr_NYbatl),0,PHP_ROUND_HALF_UP);
+                        $tank_ebr_NYsvet = round((($tank_ebr_Nsvet + $tank_ebr_Ysvet )/ $tank_ebr_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_manticor) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_manticor_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_manticor_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_manticor_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_manticor_Rsvet1=round(($account5[$i]['all']['spotted'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_manticor_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_manticor_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_manticor_Rbatl = $account5[$i]['all']['battles'];
+                        $tank_manticor_Rsvet=$account5[$i]['all']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_manticor_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_manticor_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_manticor_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                        $tank_manticor_Nsvet = $account5[$i]['stronghold_defense']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_manticor_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_manticor_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_manticor_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                        $tank_manticor_Ysvet = $account5[$i]['stronghold_skirmish']['spotted'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_manticor_NYbatl = $tank_manticor_Nbatl+ $tank_manticor_Ybatl;
+                        $tank_manticor_NYvighil = round((($tank_manticor_Nvighil+$tank_manticor_Yvighil )/ $tank_manticor_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_manticor_NYuron =  round((($tank_manticor_Nuron+$tank_manticor_Yuron )/ $tank_manticor_NYbatl),0,PHP_ROUND_HALF_UP);
+                        $tank_manticor_NYsvet = round((($tank_manticor_Nsvet + $tank_manticor_Ysvet )/ $tank_manticor_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+            }
+            if(array_search ($account5[$i]['tank_id'], $tankkkST)==true) {
+                if($account5[$i]['tank_id']==$tank_62) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_62_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_62_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_62_Rbatl1= $account5[$i]['all']['battles'];
+                        $tank_62_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_62_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_62_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_62_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_62_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_62_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_62_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_62_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_62_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_62_NYbatl = $tank_62_Nbatl+ $tank_62_Ybatl;
+                        $tank_62_NYvighil = round((($tank_62_Nvighil+$tank_62_Yvighil )/ $tank_62_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_62_NYuron =  round((($tank_62_Nuron+$tank_62_Yuron )/ $tank_62_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_907) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_907_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_907_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_907_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_907_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_907_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_907_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_907_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_907_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_907_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_907_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_907_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_907_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_907_NYbatl = $tank_907_Nbatl+ $tank_907_Ybatl;
+                        $tank_907_NYvighil = round((($tank_907_Nvighil+$tank_907_Yvighil)/$tank_907_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_907_NYuron =  round((($tank_907_Nuron+$tank_907_Yuron)/$tank_907_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_140) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_140_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_140_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_140_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_140_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_140_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_140_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_140_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_140_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_140_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_140_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_140_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_140_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_140_NYbatl = $tank_140_Nbatl+ $tank_140_Ybatl;
+                        $tank_140_NYvighil = round((($tank_140_Nvighil+$tank_140_Yvighil )/ $tank_140_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_140_NYuron =  round((($tank_140_Nuron+$tank_140_Yuron )/ $tank_140_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_430y) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_430y_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_430y_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_430y_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_430y_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_430y_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_430y_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_430y_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_430y_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_430y_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_430y_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_430y_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_430y_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_430y_NYbatl = $tank_430y_Nbatl+ $tank_430y_Ybatl;
+                        $tank_430y_NYvighil = round((($tank_430y_Nvighil+$tank_430y_Yvighil )/ $tank_430y_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_430y_NYuron =  round((($tank_430y_Nuron+$tank_430y_Yuron )/ $tank_430y_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_k91) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_k91_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_k91_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_k91_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_k91_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_k91_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_k91_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_k91_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_k91_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_k91_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_k91_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_k91_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_k91_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_k91_NYbatl = $tank_k91_Nbatl+ $tank_k91_Ybatl;
+                        $tank_k91_NYvighil = round((($tank_k91_Nvighil+$tank_k91_Yvighil )/ $tank_k91_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_k91_NYuron =  round((($tank_k91_Nuron+$tank_k91_Yuron )/ $tank_k91_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_t22) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_t22_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100,0, PHP_ROUND_HALF_UP);
+                        $tank_t22_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_t22_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_t22_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_t22_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_t22_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_t22_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_t22_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_t22_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t22_Yvighil =$account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_t22_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_t22_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t22_NYbatl = $tank_t22_Nbatl+ $tank_t22_Ybatl;
+                        $tank_t22_NYvighil = round((($tank_t22_Nvighil+$tank_t22_Yvighil )/ $tank_t22_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_t22_NYuron =  round((($tank_t22_Nuron+$tank_t22_Yuron )/ $tank_t22_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_e50) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_e50_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_e50_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_e50_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_e50_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_e50_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_e50_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_e50_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_e50_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_e50_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e50_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_e50_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_e50_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e50_NYbatl = $tank_e50_Nbatl+ $tank_e50_Ybatl;
+                        $tank_e50_NYvighil = round((($tank_e50_Nvighil+$tank_e50_Yvighil) / $tank_e50_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_e50_NYuron =  round((($tank_e50_Nuron+$tank_e50_Yuron) / $tank_e50_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_leopard) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_leopard_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_leopard_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_leopard_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_leopard_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_leopard_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_leopard_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_leopard_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_leopard_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_leopard_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_leopard_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_leopard_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_leopard_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_leopard_NYbatl = $tank_leopard_Nbatl+ $tank_leopard_Ybatl;
+                        $tank_leopard_NYvighil = round((($tank_leopard_Nvighil+$tank_leopard_Yvighil) / $tank_leopard_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_leopard_NYuron = round((($tank_leopard_Nuron+$tank_leopard_Yuron) / $tank_leopard_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_patton) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_patton_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100,0, PHP_ROUND_HALF_UP);
+                        $tank_patton_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_patton_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_patton_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_patton_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_patton_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_patton_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_patton_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_patton_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_patton_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_patton_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_patton_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_patton_NYbatl = $tank_patton_Nbatl+ $tank_patton_Ybatl;
+                        $tank_patton_NYvighil = round((($tank_patton_Nvighil+$tank_patton_Yvighil )/ $tank_patton_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_patton_NYuron =  round((($tank_patton_Nuron+$tank_patton_Yuron )/ $tank_patton_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_m60) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_m60_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_m60_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_m60_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_m60_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_m60_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_m60_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_m60_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_m60_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_m60_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_m60_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_m60_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_m60_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_m60_NYbatl = $tank_m60_Nbatl+ $tank_m60_Ybatl;
+                        $tank_m60_NYvighil = round((($tank_m60_Nvighil+$tank_m60_Yvighil )/ $tank_m60_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_m60_NYuron =  round((($tank_m60_Nuron+$tank_m60_Yuron )/ $tank_m60_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_t95e6) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_t95e6_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_t95e6_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_t95e6_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_t95e6_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_t95e6_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_t95e6_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_t95e6_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_t95e6_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_t95e6_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t95e6_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_t95e6_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_t95e6_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t95e6_NYbatl = $tank_t95e6_Nbatl+ $tank_t95e6_Ybatl;
+                        $tank_t95e6_NYvighil = round((($tank_t95e6_Nvighil+$tank_t95e6_Yvighil )/ $tank_t95e6_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_t95e6_NYuron =  round((($tank_t95e6_Nuron+$tank_t95e6_Yuron )/ $tank_t95e6_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_121) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_121_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_121_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_121_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_121_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_121_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_121_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_121_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_121_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_121_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_121_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_121_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_121_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_121_NYbatl = $tank_121_Nbatl+ $tank_121_Ybatl;
+                        $tank_121_NYvighil =round((( $tank_121_Nvighil+$tank_121_Yvighil )/ $tank_121_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_121_NYuron = round((( $tank_121_Nuron+$tank_121_Yuron )/ $tank_121_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_121b) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_121b_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_121b_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_121b_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_121b_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_121b_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_121b_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_121b_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_121b_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_121b_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_121b_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_121b_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_121b_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_121b_NYbatl = $tank_121b_Nbatl+ $tank_121b_Ybatl;
+                        $tank_121b_NYvighil =round((( $tank_121b_Nvighil+$tank_121b_Yvighil )/ $tank_121b_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_121b_NYuron =  round((($tank_121b_Nuron+$tank_121b_Yuron )/ $tank_121b_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_bat25) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_bat25_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_bat25_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_bat25_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_bat25_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_bat25_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_bat25_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_bat25_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_bat25_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_bat25_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_bat25_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_bat25_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_bat25_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_bat25_NYbatl = $tank_bat25_Nbatl+ $tank_bat25_Ybatl;
+                        $tank_bat25_NYvighil =round((( $tank_bat25_Nvighil+$tank_bat25_Yvighil) / $tank_bat25_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_bat25_NYuron =  round((($tank_bat25_Nuron+$tank_bat25_Yuron )/ $tank_bat25_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_30b) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_30b_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_30b_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_30b_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_30b_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_30b_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_30b_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_30b_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_30b_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_30b_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_30b_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_30b_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_30b_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_30b_NYbatl = $tank_30b_Nbatl+ $tank_30b_Ybatl;
+                        $tank_30b_NYvighil = round((($tank_30b_Nvighil+$tank_30b_Yvighil) / $tank_30b_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_30b_NYuron =  round((($tank_30b_Nuron+$tank_30b_Yuron )/ $tank_30b_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_centruion) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_centruion_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_centruion_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_centruion_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_centruion_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_centruion_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_centruion_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_centruion_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_centruion_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_centruion_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_centruion_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_centruion_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_centruion_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_centruion_NYbatl = $tank_centruion_Nbatl+ $tank_centruion_Ybatl;
+                        $tank_centruion_NYvighil = round((($tank_centruion_Nvighil+$tank_centruion_Yvighil )/ $tank_centruion_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_centruion_NYuron =  round((($tank_centruion_Nuron+$tank_centruion_Yuron )/ $tank_centruion_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_stb1) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_stb1_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_stb1_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_stb1_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_stb1_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_stb1_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_stb1_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_stb1_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_stb1_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_stb1_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_stb1_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_stb1_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_stb1_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_stb1_NYbatl = $tank_stb1_Nbatl+ $tank_stb1_Ybatl;
+                        $tank_stb1_NYvighil =round((($tank_stb1_Nvighil+$tank_stb1_Yvighil )/ $tank_stb1_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_stb1_NYuron =  round((($tank_stb1_Nuron+$tank_stb1_Yuron) / $tank_stb1_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_tvp) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_tvp_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_tvp_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_tvp_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_tvp_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_tvp_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_tvp_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_tvp_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_tvp_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_tvp_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_tvp_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_tvp_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_tvp_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_tvp_NYbatl = $tank_tvp_Nbatl+$tank_tvp_Ybatl;
+                        $tank_tvp_NYvighil = round((($tank_tvp_Nvighil+$tank_tvp_Yvighil )/ $tank_tvp_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_tvp_NYuron =  round((($tank_tvp_Nuron+$tank_tvp_Yuron) / $tank_tvp_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_udes1516) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_udes1516_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_udes1516_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_udes1516_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_udes1516_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_udes1516_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_udes1516_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_udes1516_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_udes1516_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_udes1516_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_udes1516_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_udes1516_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_udes1516_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_udes1516_NYbatl = $tank_udes1516_Nbatl+ $tank_udes1516_Ybatl;
+                        $tank_udes1516_NYvighil = round((($tank_udes1516_Nvighil+$tank_udes1516_Yvighil )/ $tank_udes1516_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_udes1516_NYuron =  round((($tank_udes1516_Nuron+$tank_udes1516_Yuron )/ $tank_udes1516_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_cs63) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_cs63_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_cs63_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_cs63_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_cs63_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_cs63_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_cs63_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_cs63_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_cs63_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_cs63_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_cs63_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_cs63_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_cs63_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_cs63_NYbatl = $tank_cs63_Nbatl+ $tank_cs63_Ybatl;
+                        $tank_cs63_NYvighil = round((($tank_cs63_Nvighil+$tank_cs63_Yvighil) / $tank_cs63_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_cs63_NYuron =  round((($tank_cs63_Nuron+$tank_cs63_Yuron) / $tank_cs63_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_progetto) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_progetto_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_progetto_Ruron1= round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_progetto_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_progetto_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_progetto_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_progetto_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_progetto_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_progetto_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_progetto_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_progetto_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_progetto_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_progetto_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_progetto_NYbatl = $tank_progetto_Nbatl+ $tank_progetto_Ybatl;
+                        $tank_progetto_NYvighil = round((($tank_progetto_Nvighil+$tank_progetto_Yvighil )/ $tank_progetto_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_progetto_NYuron =  round((($tank_progetto_Nuron+$tank_progetto_Yuron )/ $tank_progetto_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+            if($account5[$i]['tank_id']==$tank_carro) {
+                if($account5[$i]['all']['battles']>30) {
+                    $tank_carro_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                    $tank_carro_Ruron1= round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                    $tank_carro_Rbatl1 = $account5[$i]['all']['battles'];
+                    $tank_carro_Rvighil = $account5[$i]['all']['survived_battles'];
+                    $tank_carro_Ruron = $account5[$i]['all']['damage_dealt'];
+                    $tank_carro_Rbatl = $account5[$i]['all']['battles'];
+                }
+                if($account5[$i]['stronghold_defense']['battles']>30) {
+                    $tank_carro_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                    $tank_carro_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                    $tank_carro_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                }
+                if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                    $tank_carro_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                    $tank_carro_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                    $tank_carro_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                }
+                if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                    $tank_carro_NYbatl = $tank_carro_Nbatl+ $tank_carro_Ybatl;
+                    $tank_carro_NYvighil = round((($tank_carro_Nvighil+$tank_carro_Yvighil )/ $tank_carro_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                    $tank_carro_NYuron =  round((($tank_carro_Nuron+$tank_carro_Yuron )/ $tank_carro_NYbatl),0,PHP_ROUND_HALF_UP);
+                }
+            }
+        }
+            if(array_search ($account5[$i]['tank_id'], $tankkkTT)==true) {
+                if($account5[$i]['tank_id']==$tank_is4) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_is4_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100,0, PHP_ROUND_HALF_UP);
+                        $tank_is4_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_is4_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_is4_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_is4_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_is4_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_is4_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_is4_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_is4_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_is4_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_is4_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_is4_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_is4_NYbatl = $tank_is4_Nbatl+ $tank_is4_Ybatl;
+                        $tank_is4_NYvighil = round((($tank_is4_Nvighil+$tank_is4_Yvighil )/ $tank_is4_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_is4_NYuron =  round((($tank_is4_Nuron+$tank_is4_Yuron )/ $tank_is4_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_is7) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_is7_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_is7_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_is7_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_is7_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_is7_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_is7_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_is7_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_is7_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_is7_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_is7_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_is7_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_is7_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_is7_NYbatl = $tank_is7_Nbatl+ $tank_is7_Ybatl;
+                        $tank_is7_NYvighil = round((($tank_is7_Nvighil+$tank_is7_Yvighil )/ $tank_is7_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_is7_NYuron =  round((($tank_is7_Nuron+$tank_is7_Yuron )/ $tank_is7_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_705a) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_705a_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_705a_Ruron1= round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_705a_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_705a_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_705a_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_705a_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_705a_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_705a_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_705a_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_705a_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_705a_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_705a_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_705a_NYbatl = $tank_705a_Nbatl+ $tank_705a_Ybatl;
+                        $tank_705a_NYvighil = round((($tank_705a_Nvighil+$tank_705a_Yvighil )/ $tank_705a_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_705a_NYuron =  round((($tank_705a_Nuron+$tank_705a_Yuron )/ $tank_705a_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_277) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_277_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_277_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_277_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_277_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_277_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_277_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_277_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_277_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_277_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_277_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_277_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_277_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_277_NYbatl = $tank_277_Nbatl+ $tank_277_Ybatl;
+                        $tank_277_NYvighil = round((($tank_277_Nvighil+$tank_277_Yvighil) / $tank_277_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_277_NYuron =  round((($tank_277_Nuron+$tank_277_Yuron )/ $tank_277_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_st2) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_st2_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_st2_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_st2_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_st2_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_st2_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_st2_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_st2_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_st2_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_st2_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_st2_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_st2_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_st2_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_st2_NYbatl = $tank_st2_Nbatl+ $tank_st2_Ybatl;
+                        $tank_st2_NYvighil = round((($tank_st2_Nvighil+$tank_st2_Yvighil )/ $tank_st2_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_st2_NYuron =  round((($tank_st2_Nuron+$tank_st2_Yuron) / $tank_st2_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_279) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_279_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_279_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_279_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_279_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_279_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_279_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_279_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_279_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_279_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_279_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_279_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_279_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_279_NYbatl = $tank_279_Nbatl+ $tank_279_Ybatl;
+                        $tank_279_NYvighil = round((($tank_279_Nvighil+$tank_279_Yvighil) / $tank_279_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_279_NYuron =  round((($tank_279_Nuron+$tank_279_Yuron )/ $tank_279_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_260) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_260_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_260_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_260_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_260_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_260_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_260_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_260_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_260_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_260_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_260_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_260_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_260_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_260_NYbatl = $tank_260_Nbatl+ $tank_260_Ybatl;
+                        $tank_260_NYvighil = round((($tank_260_Nvighil+$tank_260_Yvighil )/ $tank_260_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_260_NYuron =  round((($tank_260_Nuron+$tank_260_Yuron) / $tank_260_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_maus) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_maus_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_maus_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_maus_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_maus_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_maus_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_maus_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_maus_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_maus_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_maus_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_maus_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_maus_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_maus_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_maus_NYbatl = $tank_maus_Nbatl+ $tank_maus_Ybatl;
+                        $tank_maus_NYvighil = round((($tank_maus_Nvighil+$tank_maus_Yvighil )/ $tank_maus_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_maus_NYuron =  round((($tank_maus_Nuron+$tank_maus_Yuron )/ $tank_maus_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_e100) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_e100_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_e100_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_e100_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_e100_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_e100_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_e100_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_e100_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_e100_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_e100_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e100_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_e100_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_e100_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e100_NYbatl = $tank_e100_Nbatl+ $tank_e100_Ybatl;
+                        $tank_e100_NYvighil = round((($tank_e100_Nvighil+$tank_e100_Yvighil )/ $tank_e100_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_e100_NYuron =  round((($tank_e100_Nuron+$tank_e100_Yuron) / $tank_e100_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_PZ) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_PZ_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_PZ_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_PZ_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_PZ_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_PZ_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_PZ_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_PZ_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_PZ_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_PZ_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_PZ_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_PZ_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_PZ_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_PZ_NYbatl = $tank_PZ_Nbatl+ $tank_PZ_Ybatl;
+                        $tank_PZ_NYvighil = round((($tank_PZ_Nvighil+$tank_PZ_Yvighil )/ $tank_PZ_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_PZ_NYuron =  round((($tank_PZ_Nuron+$tank_PZ_Yuron )/ $tank_PZ_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_vk72) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_vk72_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_vk72_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_vk72_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_vk72_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_vk72_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_vk72_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_vk72_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_vk72_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_vk72_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_vk72_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_vk72_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_vk72_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_vk72_NYbatl = $tank_vk72_Nbatl+ $tank_vk72_Ybatl;
+                        $tank_vk72_NYvighil = round((($tank_vk72_Nvighil+$tank_vk72_Yvighil) / $tank_vk72_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_vk72_NYuron = round((( $tank_vk72_Nuron+$tank_vk72_Yuron) / $tank_vk72_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_e5) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_e5_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_e5_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_e5_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_e5_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_e5_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_e5_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_e5_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_e5_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_e5_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e5_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_e5_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_e5_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e5_NYbatl = $tank_e5_Nbatl+ $tank_e5_Ybatl;
+                        $tank_e5_NYvighil = round((($tank_e5_Nvighil+$tank_e5_Yvighil )/ $tank_e5_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_e5_NYuron =  round((($tank_e5_Nuron+$tank_e5_Yuron )/ $tank_e5_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_t57heavy) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_t57heavy_Rvighil1= round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_t57heavy_Ruron1= round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_t57heavy_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_t57heavy_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_t57heavy_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_t57heavy_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_t57heavy_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_t57heavy_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_t57heavy_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t57heavy_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_t57heavy_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_t57heavy_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t57heavy_NYbatl = $tank_t57heavy_Nbatl+ $tank_t57heavy_Ybatl;
+                        $tank_t57heavy_NYvighil =round((( $tank_t57heavy_Nvighil+$tank_t57heavy_Yvighil )/ $tank_t57heavy_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_t57heavy_NYuron =  round((($tank_t57heavy_Nuron+$tank_t57heavy_Yuron )/ $tank_t57heavy_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_113) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_113_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_113_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_113_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_113_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_113_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_113_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_113_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_113_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_113_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_113_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_113_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_113_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_113_NYbatl = $tank_113_Nbatl+ $tank_113_Ybatl;
+                        $tank_113_NYvighil = round((($tank_113_Nvighil+$tank_113_Yvighil )/ $tank_113_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_113_NYuron =  round((($tank_113_Nuron+$tank_113_Yuron )/ $tank_113_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_wz111a) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_wz111a_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_wz111a_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_wz111a_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_wz111a_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_wz111a_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_wz111a_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_wz111a_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_wz111a_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_wz111a_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_wz111a_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_wz111a_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_wz111a_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_wz111a_NYbatl = $tank_wz111a_Nbatl+ $tank_wz111a_Ybatl;
+                        $tank_wz111a_NYvighil = round((($tank_wz111a_Nvighil+$tank_wz111a_Yvighil )/ $tank_wz111a_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_wz111a_NYuron =  round((($tank_wz111a_Nuron+$tank_wz111a_Yuron )/ $tank_wz111a_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_50b) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_50b_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_50b_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_50b_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_50b_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_50b_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_50b_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_50b_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_50b_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_50b_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_50b_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_50b_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_50b_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_50b_NYbatl = $tank_50b_Nbatl+ $tank_50b_Ybatl;
+                        $tank_50b_NYvighil = round((($tank_50b_Nvighil+$tank_50b_Yvighil )/ $tank_50b_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_50b_NYuron =  round((($tank_50b_Nuron+$tank_50b_Yuron )/ $tank_50b_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_amxm4) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_amxm4_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100,0, PHP_ROUND_HALF_UP);
+                        $tank_amxm4_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_amxm4_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_amxm4_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_amxm4_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_amxm4_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_amxm4_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_amxm4_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_amxm4_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_amxm4_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_amxm4_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_amxm4_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_amxm4_NYbatl = $tank_amxm4_Nbatl+ $tank_amxm4_Ybatl;
+                        $tank_amxm4_NYvighil = round((($tank_amxm4_Nvighil+$tank_amxm4_Yvighil )/ $tank_amxm4_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_amxm4_NYuron =  round((($tank_amxm4_Nuron+$tank_amxm4_Yuron) / $tank_amxm4_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_fv215b) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_fv215b_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_fv215b_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_fv215b_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_fv215b_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_fv215b_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_fv215b_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_fv215b_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_fv215b_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_fv215b_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv215b_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_fv215b_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_fv215b_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv215b_NYbatl = $tank_fv215b_Nbatl+ $tank_fv215b_Ybatl;
+                        $tank_fv215b_NYvighil = round((($tank_fv215b_Nvighil+$tank_fv215b_Yvighil )/ $tank_fv215b_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_fv215b_NYuron =  round((($tank_fv215b_Nuron+$tank_fv215b_Yuron )/ $tank_fv215b_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_SuperConq) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_SuperConq_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_SuperConq_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_SuperConq_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_SuperConq_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_SuperConq_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_SuperConq_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_SuperConq_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_SuperConq_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_SuperConq_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_SuperConq_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_SuperConq_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_SuperConq_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_SuperConq_NYbatl = $tank_SuperConq_Nbatl+ $tank_SuperConq_Ybatl;
+                        $tank_SuperConq_NYvighil = round((($tank_SuperConq_Nvighil+$tank_SuperConq_Yvighil )/ $tank_SuperConq_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_SuperConq_NYuron =  round((($tank_SuperConq_Nuron+$tank_SuperConq_Yuron) / $tank_SuperConq_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_t95fv4201) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_t95fv4201_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_t95fv4201_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_t95fv4201_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_t95fv4201_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_t95fv4201_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_t95fv4201_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_t95fv4201_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_t95fv4201_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_t95fv4201_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t95fv4201_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_t95fv4201_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_t95fv4201_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t95fv4201_NYbatl = $tank_t95fv4201_Nbatl+ $tank_t95fv4201_Ybatl;
+                        $tank_t95fv4201_NYvighil = round((($tank_t95fv4201_Nvighil+$tank_t95fv4201_Yvighil )/ $tank_t95fv4201_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_t95fv4201_NYuron =  round((($tank_t95fv4201_Nuron+$tank_t95fv4201_Yuron )/ $tank_t95fv4201_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_type5heavy) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_type5heavy_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_type5heavy_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_type5heavy_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_type5heavy_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_type5heavy_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_type5heavy_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_type5heavy_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_type5heavy_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_type5heavy_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_type5heavy_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_type5heavy_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_type5heavy_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_type5heavy_NYbatl = $tank_type5heavy_Nbatl+ $tank_type5heavy_Ybatl;
+                        $tank_type5heavy_NYvighil = round((($tank_type5heavy_Nvighil+$tank_type5heavy_Yvighil )/ $tank_type5heavy_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_type5heavy_NYuron =  round((($tank_type5heavy_Nuron+$tank_type5heavy_Yuron )/ $tank_type5heavy_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_vz55) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_vz55_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_vz55_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_vz55_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_vz55_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_vz55_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_vz55_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_vz55_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_vz55_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_vz55_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_vz55_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_vz55_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_vz55_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_vz55_NYbatl = $tank_vz55_Nbatl+ $tank_vz55_Ybatl;
+                        $tank_vz55_NYvighil = round((($tank_vz55_Nvighil+$tank_vz55_Yvighil )/ $tank_vz55_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_vz55_NYuron =  round((($tank_vz55_Nuron+$tank_vz55_Yuron )/ $tank_vz55_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_kran) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_kran_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_kran_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_kran_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_kran_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_kran_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_kran_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_kran_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_kran_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_kran_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_kran_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_kran_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_kran_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_kran_NYbatl = $tank_kran_Nbatl+ $tank_kran_Ybatl;
+                        $tank_kran_NYvighil = round((($tank_kran_Nvighil+$tank_kran_Yvighil )/ $tank_kran_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_kran_NYuron =  round((($tank_kran_Nuron+$tank_kran_Yuron )/ $tank_kran_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_60tp) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_60tp_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_60tp_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_60tp_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_60tp_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_60tp_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_60tp_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_60tp_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_60tp_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_60tp_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_60tp_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_60tp_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_60tp_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_60tp_NYbatl = $tank_60tp_Nbatl+ $tank_60tp_Ybatl;
+                        $tank_60tp_NYvighil = round((($tank_60tp_Nvighil+$tank_60tp_Yvighil )/ $tank_60tp_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_60tp_NYuron =  round((($tank_60tp_Nuron+$tank_60tp_Yuron )/ $tank_60tp_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_RINOCERONTE) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_RINOCERONTE_Rvighil1 = round(($account5[$i]['all']['survived_battles'] / $account5[$i]['all']['battles'])*100, 0, PHP_ROUND_HALF_UP);
+                        $tank_RINOCERONTE_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_RINOCERONTE_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_RINOCERONTE_Rvighil = $account5[$i]['all']['survived_battles'];
+                        $tank_RINOCERONTE_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_RINOCERONTE_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_RINOCERONTE_Nvighil = $account5[$i]['stronghold_defense']['survived_battles'];
+                        $tank_RINOCERONTE_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'];
+                        $tank_RINOCERONTE_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_RINOCERONTE_Yvighil = $account5[$i]['stronghold_skirmish']['survived_battles'];
+                        $tank_RINOCERONTE_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'] ;
+                        $tank_RINOCERONTE_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_RINOCERONTE_NYbatl = $tank_RINOCERONTE_Nbatl+ $tank_RINOCERONTE_Ybatl;
+                        $tank_RINOCERONTE_NYvighil = round((($tank_RINOCERONTE_Nvighil+$tank_RINOCERONTE_Yvighil )/ $tank_RINOCERONTE_NYbatl)*100,0,PHP_ROUND_HALF_UP);
+                        $tank_RINOCERONTE_NYuron =  round((($tank_RINOCERONTE_Nuron+$tank_RINOCERONTE_Yuron )/ $tank_RINOCERONTE_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+            }
+            if(array_search ($account5[$i]['tank_id'], $tankkkPT)==true) {
+                if($account5[$i]['tank_id']==$tank_268) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_268_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_268_Rbatl1= $account5[$i]['all']['battles'];
+                        $tank_268_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_268_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_268_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_268_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_268_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_268_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_268_NYbatl = $tank_268_Nbatl+ $tank_268_Ybatl;
+                        $tank_268_NYuron =  round((($tank_268_Nuron+$tank_268_Yuron )/ $tank_268_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_2684) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_2684_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_2684_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_2684_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_2684_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_2684_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_2684_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_2684_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_2684_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_2684_NYbatl = $tank_2684_Nbatl+ $tank_2684_Ybatl;
+                        $tank_2684_NYuron =  round((($tank_2684_Nuron+$tank_2684_Yuron )/ $tank_2684_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_jgE100) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_jgE100_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_jgE100_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_jgE100_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_jgE100_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_jgE100_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_jgE100_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_jgE100_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_jgE100_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_jgE100_NYbatl = $tank_jgE100_Nbatl+ $tank_jgE100_Ybatl;
+                        $tank_jgE100_NYuron =  round((($tank_jgE100_Nuron+$tank_jgE100_Yuron )/ $tank_jgE100_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_gril) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_gril_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_gril_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_gril_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_gril_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_gril_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_gril_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_gril_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_gril_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_gril_NYbatl = $tank_gril_Nbatl+ $tank_gril_Ybatl;
+                        $tank_gril_NYuron =  round((($tank_gril_Nuron+$tank_gril_Yuron )/ $tank_gril_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_e4) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_e4_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_e4_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_e4_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_e4_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_e4_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_e4_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e4_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_e4_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e4_NYbatl = $tank_e4_Nbatl+ $tank_e4_Ybatl;
+                        $tank_e4_NYuron = round((($tank_e4_Nuron+$tank_e4_Yuron )/ $tank_e4_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_e3) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_e3_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_e3_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_e3_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_e3_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_e3_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_e3_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e3_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_e3_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_e3_NYbatl = $tank_e3_Nbatl+ $tank_e3_Ybatl;
+                        $tank_e3_NYuron =  round((($tank_e3_Nuron+$tank_e3_Yuron )/ $tank_e3_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_wz113) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_wz113_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_wz113_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_wz113_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_wz113_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_wz113_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_wz113_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_wz113_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_wz113_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_wz113_NYbatl = $tank_wz113_Nbatl+ $tank_wz113_Ybatl;
+                        $tank_wz113_NYuron =  round((($tank_wz113_Nuron+$tank_wz113_Yuron )/ $tank_wz113_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_50foch) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_50foch_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_50foch_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_50foch_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_50foch_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_50foch_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_50foch_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_50foch_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_50foch_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_50foch_NYbatl = $tank_50foch_Nbatl+ $tank_50foch_Ybatl;
+                        $tank_50foch_NYuron =  round((($tank_50foch_Nuron+$tank_50foch_Yuron )/ $tank_50foch_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_50fochB) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_50fochB_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_50fochB_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_50fochB_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_50fochB_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_50fochB_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_50fochB_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_50fochB_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_50fochB_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_50fochB_NYbatl = $tank_50fochB_Nbatl+ $tank_50fochB_Ybatl;
+                        $tank_50fochB_NYuron =  round((($tank_50fochB_Nuron+$tank_50fochB_Yuron )/ $tank_50fochB_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_fv215b183) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_fv215b183_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_fv215b183_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_fv215b183 = $account5[$i]['all']['damage_dealt'];
+                        $tank_fv215b183_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_fv215b183_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_fv215b183_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv215b183_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_fv215b183_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv215b183_NYbatl = $tank_fv215b183_Nbatl+ $tank_fv215b183_Ybatl;
+                        $tank_fv215b183_NYuron =  round((($tank_fv215b183_Nuron+$tank_fv215b183_Yuron )/ $tank_fv215b183_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_fv4005) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_fv4005_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_fv4005_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_fv4005_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_fv4005_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_fv4005_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_fv4005_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv4005_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_fv4005_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv4005_NYbatl = $tank_fv4005_Nbatl+ $tank_fv4005_Ybatl;
+                        $tank_fv4005_NYuron =  round((($tank_fv4005_Nuron+$tank_fv4005_Yuron )/ $tank_fv4005_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_fv217badger) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_fv217badger_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_fv217badger_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_fv217badger = $account5[$i]['all']['damage_dealt'];
+                        $tank_fv217badger = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_fv217badger_Nuron =$account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_fv217badger_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv217badger_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_fv217badger_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_fv217badger_NYbatl = $tank_fv217badger_Nbatl+ $tank_fv217badger_Ybatl;
+                        $tank_fv217badger_NYuron =  round((($tank_fv217badger_Nuron+$tank_fv217badger_Yuron )/ $tank_fv217badger_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_strv) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_strv_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_strv_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_strv_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_strv_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_strv_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_strv_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_strv_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_strv_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_strv_NYbatl = $tank_strv_Nbatl+ $tank_strv_Ybatl;
+                        $tank_strv_NYuron =  round((($tank_strv_Nuron+$tank_strv_Yuron )/ $tank_strv_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+            }
+            if(array_search ($account5[$i]['tank_id'], $tankkkSAU)==true) {
+                if($account5[$i]['tank_id']==$tank_261) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_261_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_261_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_261_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_261_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_261_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_261_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_261_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_261_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_261_NYbatl = $tank_261_Nbatl + $tank_261_Ybatl;
+                        $tank_261_NYuron = round((($tank_261_Nuron + $tank_261_Yuron )/ $tank_261_NYbatl), 0, PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_gwe) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_gwe_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_gwe_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_gwe_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_gwe_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_gwe_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_gwe_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_gwe_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_gwe_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_gwe_NYbatl = $tank_gwe_Nbatl+ $tank_gwe_Ybatl;
+                        $tank_gwe_NYuron =  round((($tank_gwe_Nuron+$tank_gwe_Yuron )/ $tank_gwe_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_t92) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_t92_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_t92_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_t92_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_t92_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_t92_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_t92_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t92_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_t92_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_t92_NYbatl = $tank_t92_Nbatl+ $tank_t92_Ybatl;
+                        $tank_t92_NYuron =  round((($tank_t92_Nuron+$tank_t92_Yuron )/ $tank_t92_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_Bat155) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_Bat155_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_Bat155_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_Bat155_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_Bat155_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_Bat155_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_Bat155_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_Bat155_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_Bat155_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_Bat155_NYbatl = $tank_Bat155_Nbatl+ $tank_Bat155_Ybatl;
+                        $tank_Bat155_NYuron =  round((($tank_Bat155_Nuron+$tank_Bat155_Yuron )/ $tank_Bat155_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+                if($account5[$i]['tank_id']==$tank_Conq) {
+                    if($account5[$i]['all']['battles']>30) {
+                        $tank_Conq_Ruron1 = round(($account5[$i]['all']['damage_dealt'] / $account5[$i]['all']['battles']), 0, PHP_ROUND_HALF_UP);
+                        $tank_Conq_Rbatl1 = $account5[$i]['all']['battles'];
+                        $tank_Conq_Ruron = $account5[$i]['all']['damage_dealt'];
+                        $tank_Conq_Rbatl = $account5[$i]['all']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30) {
+                        $tank_Conq_Nuron = $account5[$i]['stronghold_defense']['damage_dealt'] ;
+                        $tank_Conq_Nbatl = $account5[$i]['stronghold_defense']['battles'];
+                    }
+                    if($account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_Conq_Yuron = $account5[$i]['stronghold_skirmish']['damage_dealt'];
+                        $tank_Conq_Ybatl = $account5[$i]['stronghold_skirmish']['battles'];
+                    }
+                    if($account5[$i]['stronghold_defense']['battles']>30 || $account5[$i]['stronghold_skirmish']['battles']>30) {
+                        $tank_Conq_NYbatl = $tank_Conq_Nbatl+ $tank_Conq_Ybatl;
+                        $tank_Conq_NYuron =  round((($tank_Conq_Nuron+$tank_Conq_Yuron) / $tank_Conq_NYbatl),0,PHP_ROUND_HALF_UP);
+                    }
+                }
+            }
+            if($account5[$i]['tank_id']==0)
+                break;
+        }
+    }
+}
+$LT_Rvighil=0;
+    $LT_Ruron=0;
+        $LT_Rbatl=0;
+            $LT_Rsvet=0;
+                $LT_NYbatl=0;
+                    $LT_NYvighil=0;
+                        $LT_NYuron=0;
+                            $LT_NYsvet=0;
+if($tank_100lt_Rbatl>30 || $tank_manticor_Rbatl>30 || $tank_rhm_Rbatl>30 || $tank_sheridan_Rbatl>30 || $tank_wz1321_Rbatl>30 || $tank_13105_Rbatl>30 || $tank_ebr_Rbatl>30) {
+    $LT_Rvighil = round((($tank_100lt_Rvighil + $tank_rhm_Rvighil + $tank_sheridan_Rvighil + $tank_wz1321_Rvighil + $tank_13105_Rvighil + $tank_ebr_Rvighil + $tank_manticor_Rvighil) / ($tank_100lt_Rbatl + $tank_rhm_Rbatl + $tank_sheridan_Rbatl + $tank_wz1321_Rbatl + $tank_13105_Rbatl + $tank_ebr_Rbatl + $tank_manticor_Rbatl)) * 100, 0, PHP_ROUND_HALF_UP);
+    $LT_Ruron = round(($tank_100lt_Ruron + $tank_rhm_Ruron + $tank_sheridan_Ruron + $tank_wz1321_Ruron + $tank_13105_Ruron + $tank_ebr_Ruron + $tank_manticor_Ruron) / ($tank_100lt_Rbatl + $tank_rhm_Rbatl + $tank_sheridan_Rbatl + $tank_wz1321_Rbatl + $tank_13105_Rbatl + $tank_ebr_Rbatl + $tank_manticor_Rbatl), 0, PHP_ROUND_HALF_UP);
+    $LT_Rbatl = $tank_100lt_Rbatl + $tank_rhm_Rbatl + $tank_sheridan_Rbatl + $tank_wz1321_Rbatl + $tank_13105_Rbatl + $tank_ebr_Rbatl + $tank_manticor_Rbatl;
+    $LT_Rsvet = round(($tank_100lt_Rsvet + $tank_rhm_Rsvet + $tank_sheridan_Rsvet + $tank_wz1321_Rsvet + $tank_13105_Rsvet + $tank_ebr_Rsvet + $tank_manticor_Rsvet) / ($tank_100lt_Rbatl + $tank_rhm_Rbatl + $tank_sheridan_Rbatl + $tank_wz1321_Rbatl + $tank_13105_Rbatl + $tank_ebr_Rbatl + $tank_manticor_Rbatl), 0, PHP_ROUND_HALF_UP);
+}
+if($tank_100lt_NYbatl>30 || $tank_manticor_NYbatl>30 || $tank_rhm_NYbatl>30 || $tank_sheridan_NYbatl>30 || $tank_wz1321_NYbatl>30 || $tank_13105_NYbatl>30 || $tank_ebr_NYbatl>30) {
+    $LT_NYbatl = $tank_100lt_NYbatl + $tank_rhm_NYbatl + $tank_sheridan_NYbatl + $tank_wz1321_NYbatl + $tank_13105_NYbatl + $tank_ebr_NYbatl + $tank_manticor_NYbatl;
+    $LT_NYvighil = round((($tank_100lt_Yvighil + $tank_rhm_Yvighil + $tank_sheridan_Yvighil + $tank_wz1321_Yvighil + $tank_13105_Yvighil + $tank_ebr_Yvighil + $tank_manticor_Yvighil + $tank_100lt_Nvighil + $tank_rhm_Nvighil + $tank_sheridan_Nvighil + $tank_wz1321_Nvighil + $tank_13105_Nvighil + $tank_ebr_Nvighil + $tank_manticor_Nvighil) / $LT_NYbatl) * 100, 0, PHP_ROUND_HALF_UP);
+    $LT_NYuron = round(($tank_100lt_Yuron + $tank_rhm_Yuron + $tank_sheridan_Yuron + $tank_wz1321_Yuron + $tank_13105_Yuron + $tank_ebr_Yuron + $tank_manticor_Yuron + $tank_100lt_Nuron + $tank_rhm_Nuron + $tank_sheridan_Nuron + $tank_wz1321_Nuron + $tank_13105_Nuron + $tank_ebr_Nuron + $tank_manticor_Nuron) / $LT_NYbatl, 0, PHP_ROUND_HALF_UP);
+    $LT_NYsvet = round(($tank_100lt_Ysvet + $tank_rhm_Ysvet + $tank_sheridan_Ysvet + $tank_wz1321_Ysvet + $tank_13105_Ysvet + $tank_ebr_Ysvet + $tank_manticor_Ysvet + $tank_100lt_Nsvet + $tank_rhm_Nsvet + $tank_sheridan_Nsvet + $tank_wz1321_Nsvet + $tank_13105_Nsvet + $tank_ebr_Nsvet + $tank_manticor_Nsvet) / $LT_NYbatl, 0, PHP_ROUND_HALF_UP);
+}
+$ST_Rvighil=0;
+$ST_Ruron=0;
+$ST_Rbatl=0;
+$ST_NYbatl=0;
+$ST_NYvighil=0;
+$ST_NYuron=0;
+if($tank_62_Rbatl>30 || $tank_907_Rbatl>30 || $tank_140_Rbatl>30 || $tank_430y_Rbatl>30 || $tank_k91_Rbatl>30 || $tank_t22_Rbatl>30 || $tank_e50_Rbatl>30 || $tank_leopard_Rbatl>30 || $tank_patton_Rbatl>30 || $tank_m60_Rbatl>30 || $tank_t95e6_Rbatl>30 || $tank_121_Rbatl>30 || $tank_121b_Rbatl>30 || $tank_bat25_Rbatl>30 || $tank_30b_Rbatl>30 || $tank_centruion_Rbatl>30 || $tank_stb1_Rbatl>30 || $tank_tvp_Rbatl>30 || $tank_udes1516_Rbatl>30 || $tank_cs63_Rbatl>30 || $tank_progetto_Rbatl>30 || $tank_carro_Rbatl>30) {
+    $ST_Rbatl = $tank_62_Rbatl + $tank_907_Rbatl + $tank_140_Rbatl + $tank_430y_Rbatl + $tank_k91_Rbatl + $tank_t22_Rbatl + $tank_e50_Rbatl + $tank_leopard_Rbatl+ $tank_patton_Rbatl+ $tank_m60_Rbatl+ $tank_t95e6_Rbatl+ $tank_121_Rbatl+ $tank_121b_Rbatl+ $tank_bat25_Rbatl+ $tank_30b_Rbatl + $tank_centruion_Rbatl + $tank_stb1_Rbatl + $tank_tvp_Rbatl + $tank_udes1516_Rbatl + $tank_cs63_Rbatl + $tank_progetto_Rbatl;
+    $ST_Rvighil = round((($tank_62_Rvighil + $tank_907_Rvighil + $tank_140_Rvighil + $tank_430y_Rvighil + $tank_k91_Rvighil + $tank_t22_Rvighil + $tank_e50_Rvighil + $tank_leopard_Rvighil + $tank_patton_Rvighil + $tank_m60_Rvighil + $tank_t95e6_Rvighil + $tank_121_Rvighil + $tank_121b_Rvighil + $tank_bat25_Rvighil + $tank_30b_Rvighil + $tank_centruion_Rvighil + $tank_stb1_Rvighil + $tank_tvp_Rvighil + $tank_udes1516_Rvighil + $tank_cs63_Rvighil + $tank_progetto_Rvighil + $tank_carro_Rvighil) / $ST_Rbatl) * 100, 0, PHP_ROUND_HALF_UP);
+    $ST_Ruron = round(($tank_62_Ruron + $tank_907_Ruron + $tank_140_Ruron + $tank_430y_Ruron + $tank_k91_Ruron + $tank_t22_Ruron + $tank_e50_Ruron + $tank_leopard_Ruron + $tank_patton_Ruron + $tank_m60_Ruron + $tank_t95e6_Ruron + $tank_121_Ruron + $tank_121b_Ruron + $tank_bat25_Ruron + $tank_30b_Ruron + $tank_centruion_Ruron + $tank_stb1_Ruron + $tank_tvp_Ruron + $tank_udes1516_Ruron + $tank_cs63_Ruron + $tank_progetto_Ruron + $tank_carro_Ruron ) / $ST_Rbatl, 0, PHP_ROUND_HALF_UP);
+}
+if($tank_62_NYbatl>30 || $tank_907_NYbatl>30 || $tank_140_NYbatl>30 || $tank_430y_NYbatl>30 || $tank_k91_NYbatl>30 || $tank_t22_NYbatl>30 || $tank_e50_NYbatl>30 || $tank_leopard_NYbatl>30 || $tank_patton_NYbatl>30 || $tank_m60_NYbatl>30 || $tank_t95e6_NYbatl>30 || $tank_121_NYbatl>30 || $tank_121b_NYbatl>30 || $tank_bat25_NYbatl>30 || $tank_30b_NYbatl>30 || $tank_centruion_NYbatl>30 || $tank_stb1_NYbatl>30 || $tank_tvp_NYbatl>30 || $tank_udes1516_NYbatl>30 || $tank_cs63_NYbatl>30 || $tank_progetto_NYbatl>30 || $tank_carro_NYbatl>30) {
+    $ST_NYbatl = $tank_62_NYbatl + $tank_907_NYbatl + $tank_140_NYbatl + $tank_430y_NYbatl + $tank_k91_NYbatl + $tank_t22_NYbatl + $tank_e50_NYbatl + $tank_leopard_NYbatl+ $tank_patton_NYbatl+ $tank_m60_NYbatl+ $tank_t95e6_NYbatl+ $tank_121_NYbatl+ $tank_121b_NYbatl+ $tank_bat25_NYbatl+ $tank_30b_NYbatl + $tank_centruion_NYbatl + $tank_stb1_NYbatl + $tank_tvp_NYbatl + $tank_udes1516_NYbatl + $tank_cs63_NYbatl + $tank_progetto_NYbatl + $tank_carro_NYbatl;
+    $ST_NYvighil = round((($tank_62_Yvighil + $tank_907_Yvighil + $tank_140_Yvighil + $tank_430y_Yvighil + $tank_k91_Yvighil + $tank_t22_Yvighil + $tank_e50_Yvighil + $tank_leopard_Yvighil + $tank_patton_Yvighil + $tank_m60_Yvighil + $tank_t95e6_Yvighil + $tank_121_Yvighil + $tank_121b_Yvighil + $tank_bat25_Yvighil + $tank_30b_Yvighil + $tank_centruion_Yvighil + $tank_stb1_Yvighil + $tank_tvp_Yvighil + $tank_udes1516_Yvighil + $tank_cs63_Yvighil + $tank_progetto_Yvighil + $tank_carro_Yvighil+$tank_62_Nvighil + $tank_907_Nvighil + $tank_140_Nvighil + $tank_430y_Nvighil + $tank_k91_Nvighil + $tank_t22_Nvighil + $tank_e50_Nvighil + $tank_leopard_Nvighil + $tank_patton_Nvighil + $tank_m60_Nvighil + $tank_t95e6_Nvighil + $tank_121_Nvighil + $tank_121b_Nvighil + $tank_bat25_Nvighil + $tank_30b_Nvighil + $tank_centruion_Nvighil + $tank_stb1_Nvighil + $tank_tvp_Nvighil + $tank_udes1516_Nvighil + $tank_cs63_Nvighil + $tank_progetto_Nvighil + $tank_carro_Nvighil) / $ST_NYbatl) * 100, 0, PHP_ROUND_HALF_UP);
+    $ST_NYuron = round(($tank_62_Yuron + $tank_907_Yuron + $tank_140_Yuron + $tank_430y_Yuron + $tank_k91_Yuron + $tank_t22_Yuron + $tank_e50_Yuron + $tank_leopard_Yuron + $tank_patton_Yuron + $tank_m60_Yuron + $tank_t95e6_Yuron + $tank_121_Yuron + $tank_121b_Yuron + $tank_bat25_Yuron + $tank_30b_Yuron + $tank_centruion_Yuron + $tank_stb1_Yuron + $tank_tvp_Yuron + $tank_udes1516_Yuron + $tank_cs63_Yuron + $tank_progetto_Yuron + $tank_carro_Yuron +$tank_62_Nuron + $tank_907_Nuron + $tank_140_Nuron + $tank_430y_Nuron + $tank_k91_Nuron + $tank_t22_Nuron + $tank_e50_Nuron + $tank_leopard_Nuron + $tank_patton_Nuron + $tank_m60_Nuron + $tank_t95e6_Nuron + $tank_121_Nuron + $tank_121b_Nuron + $tank_bat25_Nuron + $tank_30b_Nuron + $tank_centruion_Nuron + $tank_stb1_Nuron + $tank_tvp_Nuron + $tank_udes1516_Nuron + $tank_cs63_Nuron + $tank_progetto_Nuron + $tank_carro_Nuron ) / $ST_NYbatl, 0, PHP_ROUND_HALF_UP);
+}
+$TT_Rvighil=0;
+$TT_Ruron=0;
+$TT_Rbatl=0;
+$TT_NYbatl=0;
+$TT_NYvighil=0;
+$TT_NYuron=0;
+if($tank_is4_Rbatl>30 || $tank_is7_Rbatl>30 || $tank_705a_Rbatl>30 || $tank_277_Rbatl>30 || $tank_st2_Rbatl>30 || $tank_279_Rbatl>30 || $tank_260_Rbatl>30 || $tank_maus_Rbatl>30 || $tank_e100_Rbatl>30 || $tank_PZ_Rbatl>30 || $tank_vk72_Rbatl>30 || $tank_e5_Rbatl>30 || $tank_t57heavy_Rbatl>30 || $tank_113_Rbatl>30 || $tank_wz111a_Rbatl>30 || $tank_50b_Rbatl>30 || $tank_amxm4_Rbatl>30 || $tank_fv215b_Rbatl>30 || $tank_SuperConq_Rbatl>30 || $tank_t95fv4201_Rbatl>30 || $tank_type5heavy_Rbatl>30 || $tank_vz55_Rbatl>30 || $tank_kran_Rbatl>30 || $tank_60tp_Rbatl>30 || $tank_RINOCERONTE_Rbatl>30) {
+    $TT_Rbatl = $tank_is4_Rbatl+ $tank_is7_Rbatl+ $tank_705a_Rbatl+ $tank_277_Rbatl+ $tank_st2_Rbatl+ $tank_279_Rbatl+$tank_260_Rbatl+$tank_maus_Rbatl+$tank_e100_Rbatl+$tank_PZ_Rbatl+ $tank_vk72_Rbatl+ $tank_e5_Rbatl+$tank_t57heavy_Rbatl+$tank_113_Rbatl+$tank_wz111a_Rbatl+$tank_50b_Rbatl+$tank_amxm4_Rbatl+$tank_fv215b_Rbatl+ $tank_SuperConq_Rbatl+ $tank_t95fv4201_Rbatl+$tank_type5heavy_Rbatl+$tank_vz55_Rbatl+$tank_kran_Rbatl+$tank_60tp_Rbatl+$tank_RINOCERONTE_Rbatl;
+    $TT_Rvighil = round((($tank_is4_Rvighil + $tank_is7_Rvighil + $tank_705a_Rvighil + $tank_277_Rvighil + $tank_st2_Rvighil + $tank_279_Rvighil + $tank_260_Rvighil + $tank_maus_Rvighil + $tank_e100_Rvighil + $tank_PZ_Rvighil + $tank_vk72_Rvighil + $tank_e5_Rvighil + $tank_t57heavy_Rvighil + $tank_113_Rvighil + $tank_wz111a_Rvighil + $tank_50b_Rvighil + $tank_amxm4_Rvighil + $tank_fv215b_Rvighil + $tank_SuperConq_Rvighil + $tank_t95fv4201_Rvighil + $tank_type5heavy_Rvighil + $tank_vz55_Rvighil + $tank_kran_Rvighil + $tank_60tp_Rvighil + $tank_RINOCERONTE_Rvighil) / $TT_Rbatl) * 100, 0, PHP_ROUND_HALF_UP);
+    $TT_Ruron = round(($tank_is4_Ruron + $tank_is7_Ruron + $tank_705a_Ruron + $tank_277_Ruron + $tank_st2_Ruron + $tank_279_Ruron + $tank_260_Ruron + $tank_maus_Ruron + $tank_e100_Ruron + $tank_PZ_Ruron + $tank_vk72_Ruron + $tank_e5_Ruron + $tank_t57heavy_Ruron + $tank_113_Ruron + $tank_wz111a_Ruron + $tank_50b_Ruron + $tank_amxm4_Ruron + $tank_fv215b_Ruron + $tank_SuperConq_Ruron + $tank_t95fv4201_Ruron + $tank_type5heavy_Ruron + $tank_vz55_Ruron+ $tank_kran_Ruron+ $tank_60tp_Ruron + $tank_RINOCERONTE_Ruron) / $TT_Rbatl, 0, PHP_ROUND_HALF_UP);
+}
+if($tank_is4_NYbatl>30 || $tank_is7_NYbatl>30 || $tank_705a_NYbatl>30 || $tank_277_NYbatl>30 || $tank_st2_NYbatl>30 || $tank_279_NYbatl>30 || $tank_260_NYbatl>30 || $tank_maus_NYbatl>30 || $tank_e100_NYbatl>30 || $tank_PZ_NYbatl>30 || $tank_vk72_NYbatl>30 || $tank_e5_NYbatl>30 || $tank_t57heavy_NYbatl>30 || $tank_113_NYbatl>30 || $tank_wz111a_NYbatl>30 || $tank_50b_NYbatl>30 || $tank_amxm4_NYbatl>30 || $tank_fv215b_NYbatl>30 || $tank_SuperConq_NYbatl>30 || $tank_t95fv4201_NYbatl>30 || $tank_type5heavy_NYbatl>30 || $tank_vz55_NYbatl>30 || $tank_kran_NYbatl>30 || $tank_60tp_NYbatl>30 || $tank_RINOCERONTE_NYbatl>30) {
+    $TT_NYbatl = $tank_is4_NYbatl+ $tank_is7_NYbatl+ $tank_705a_NYbatl+ $tank_277_NYbatl+ $tank_st2_NYbatl+ $tank_279_NYbatl+$tank_260_NYbatl+$tank_maus_NYbatl+$tank_e100_NYbatl+$tank_PZ_NYbatl+ $tank_vk72_NYbatl+ $tank_e5_NYbatl+$tank_t57heavy_NYbatl+$tank_113_NYbatl+$tank_wz111a_NYbatl+$tank_50b_NYbatl+$tank_amxm4_NYbatl+$tank_fv215b_NYbatl+ $tank_SuperConq_NYbatl+ $tank_t95fv4201_NYbatl+$tank_type5heavy_NYbatl+$tank_vz55_NYbatl+$tank_kran_NYbatl+$tank_60tp_NYbatl+$tank_RINOCERONTE_NYbatl;
+    $TT_NYvighil = round((($tank_is4_Yvighil + $tank_is7_Yvighil + $tank_705a_Yvighil + $tank_277_Yvighil + $tank_st2_Yvighil + $tank_279_Yvighil + $tank_260_Yvighil + $tank_maus_Yvighil + $tank_e100_Yvighil + $tank_PZ_Yvighil + $tank_vk72_Yvighil + $tank_e5_Yvighil + $tank_t57heavy_Yvighil + $tank_113_Yvighil + $tank_wz111a_Yvighil + $tank_50b_Yvighil + $tank_amxm4_Yvighil + $tank_fv215b_Yvighil + $tank_SuperConq_Yvighil + $tank_t95fv4201_Yvighil + $tank_type5heavy_Yvighil + $tank_kran_Yvighil + $tank_60tp_Yvighil + $tank_RINOCERONTE_Yvighil+$tank_is4_Nvighil + $tank_is7_Nvighil + $tank_705a_Nvighil + $tank_277_Nvighil + $tank_st2_Nvighil + $tank_279_Nvighil + $tank_260_Nvighil + $tank_maus_Nvighil + $tank_e100_Nvighil + $tank_PZ_Nvighil + $tank_vk72_Nvighil + $tank_e5_Nvighil + $tank_t57heavy_Nvighil + $tank_113_Nvighil + $tank_wz111a_Nvighil + $tank_50b_Nvighil + $tank_amxm4_Nvighil + $tank_fv215b_Nvighil + $tank_SuperConq_Nvighil + $tank_t95fv4201_Nvighil + $tank_type5heavy_Nvighil + $tank_vz55_Nvighil + $tank_kran_Nvighil + $tank_60tp_Nvighil + $tank_RINOCERONTE_Nvighil) / $TT_NYbatl) * 100, 0, PHP_ROUND_HALF_UP);
+    $TT_NYuron = round(($tank_is4_Yuron + $tank_is7_Yuron + $tank_705a_Yuron + $tank_277_Yuron + $tank_st2_Yuron + $tank_279_Yuron + $tank_260_Yuron + $tank_maus_Yuron + $tank_e100_Yuron + $tank_PZ_Yuron + $tank_vk72_Yuron + $tank_e5_Yuron + $tank_t57heavy_Yuron + $tank_113_Yuron + $tank_wz111a_Yuron + $tank_50b_Yuron + $tank_amxm4_Yuron + $tank_fv215b_Yuron + $tank_SuperConq_Yuron + $tank_t95fv4201_Yuron + $tank_type5heavy_Yuron+ $tank_kran_Yuron+ $tank_60tp_Yuron+ $tank_RINOCERONTE_Yuron+$tank_is4_Nuron + $tank_is7_Nuron + $tank_705a_Nuron + $tank_277_Nuron + $tank_st2_Nuron + $tank_279_Nuron + $tank_260_Nuron + $tank_maus_Nuron + $tank_e100_Nuron + $tank_PZ_Nuron + $tank_vk72_Nuron + $tank_e5_Nuron + $tank_t57heavy_Nuron + $tank_113_Nuron + $tank_wz111a_Nuron + $tank_50b_Nuron + $tank_amxm4_Nuron + $tank_fv215b_Nuron + $tank_SuperConq_Nuron + $tank_t95fv4201_Nuron + $tank_type5heavy_Nuron + $tank_vz55_Nuron+ $tank_kran_Nuron+ $tank_60tp_Nuron+ $tank_RINOCERONTE_Nuron) / $TT_NYbatl, 0, PHP_ROUND_HALF_UP);
+}
+$PT_Ruron=0;
+$PT_Rbatl=0;
+$PT_NYbatl=0;
+$PT_NYuron=0;
+if($tank_268_Rbatl>30 || $tank_2684_Rbatl>30 || $tank_jgE100_Rbatl>30 || $tank_gril_Rbatl>30 || $tank_e4_Rbatl>30 || $tank_e3_Rbatl>30 || $tank_wz113_Rbatl>30 || $tank_50foch_Rbatl>30 || $tank_50fochB_Rbatl>30 || $tank_fv215b183_Rbatl>30 || $tank_fv4005_Rbatl>30 || $tank_fv217badger_Rbatl>30 || $tank_strv_Rbatl>30) {
+    $PT_Rbatl = $tank_268_Rbatl+$tank_2684_Rbatl+$tank_jgE100_Rbatl+$tank_gril_Rbatl+$tank_e4_Rbatl+$tank_e3_Rbatl+$tank_wz113_Rbatl+$tank_50foch_Rbatl+$tank_50fochB_Rbatl+$tank_fv215b183_Rbatl+$tank_fv4005_Rbatl+$tank_fv217badger_Rbatl+$tank_strv_Rbatl;
+    $PT_Ruron = round(($tank_268_Ruron + $tank_2684_Ruron + $tank_jgE100_Ruron + $tank_gril_Ruron + $tank_e4_Ruron + $tank_e3_Ruron + $tank_wz113_Ruron + $tank_50foch_Ruron + $tank_50fochB_Ruron + $tank_fv215b183_Ruron + $tank_fv4005_Ruron + $tank_fv217badger_Ruron + $tank_strv_Ruron) / $PT_Rbatl, 0, PHP_ROUND_HALF_UP);
+}
+if($tank_268_NYbatl>30 || $tank_2684_NYbatl>30 || $tank_jgE100_NYbatl>30 || $tank_gril_NYbatl>30 || $tank_e4_NYbatl>30 || $tank_e3_NYbatl>30 || $tank_wz113_NYbatl>30 || $tank_50foch_NYbatl>30 || $tank_50fochB_NYbatl>30 || $tank_fv215b183_NYbatl>30 || $tank_fv4005_NYbatl>30 || $tank_fv217badger_NYbatl>30 || $tank_strv_NYbatl>30) {
+    $PT_NYbatl = $tank_268_NYbatl+$tank_2684_NYbatl+$tank_jgE100_NYbatl+$tank_gril_NYbatl+$tank_e4_NYbatl+$tank_e3_NYbatl+$tank_wz113_NYbatl+$tank_50foch_NYbatl+$tank_50fochB_NYbatl+$tank_fv215b183_NYbatl+$tank_fv4005_NYbatl+$tank_fv217badger_NYbatl+$tank_strv_NYbatl;
+    $PT_NYuron = round(($tank_268_Yuron + $tank_2684_Yuron + $tank_jgE100_Yuron + $tank_gril_Yuron + $tank_e4_Yuron + $tank_e3_Yuron + $tank_wz113_Yuron + $tank_50foch_Yuron + $tank_50fochB_Yuron + $tank_fv215b183_Yuron + $tank_fv4005_Yuron + $tank_fv217badger_Yuron + $tank_strv_Yuron+$tank_268_Nuron + $tank_2684_Nuron + $tank_jgE100_Nuron + $tank_gril_Nuron + $tank_e4_Nuron + $tank_e3_Nuron + $tank_wz113_Nuron + $tank_50foch_Nuron + $tank_50fochB_Nuron + $tank_fv215b183_Nuron + $tank_fv4005_Nuron + $tank_fv217badger_Nuron + $tank_strv_Nuron) / $PT_NYbatl, 0, PHP_ROUND_HALF_UP);
+}
+$AT_Ruron=0;
+$AT_Rbatl=0;
+$AT_NYbatl=0;
+$AT_NYuron=0;
+if($tank_261_Rbatl>30 || $tank_gwe_Rbatl>30 || $tank_t92_Rbatl>30 || $tank_Bat155_Rbatl>30 || $tank_Conq_Rbatl>30) {
+    $AT_Rbatl = $tank_261_Rbatl+$tank_gwe_Rbatl+$tank_t92_Rbatl+$tank_Bat155_Rbatl+$tank_Conq_Rbatl;
+    $AT_Ruron = round(($tank_261_Ruron + $tank_gwe_Ruron + $tank_t92_Ruron + $tank_Bat155_Ruron + $tank_Conq_Ruron) / $AT_Rbatl, 0, PHP_ROUND_HALF_UP);
+}
+if($tank_261_NYbatl>30 || $tank_gwe_NYbatl>30 || $tank_t92_NYbatl>30 || $tank_Bat155_NYbatl>30 || $tank_Conq_NYbatl>30) {
+    $AT_NYbatl = $tank_261_NYbatl+$tank_gwe_NYbatl+$tank_t92_NYbatl+$tank_Bat155_NYbatl+$tank_Conq_NYbatl;
+    $AT_NYuron = round(($tank_261_Yuron + $tank_gwe_Yuron + $tank_t92_Yuron + $tank_Bat155_Yuron + $tank_Conq_Yuron+$tank_261_Nuron + $tank_gwe_Nuron + $tank_t92_Nuron + $tank_Bat155_Nuron + $tank_Conq_Nuron) / $AT_NYbatl, 0, PHP_ROUND_HALF_UP);
+}
+$tank_100lt_RE=$tank_100lt_Ruron1*(($tank_100lt_Rvighil1/100)+1)*(((($tank_100lt_Rsvet1/5)*33)/100)+1);
+$tank_100lt_NE=$tank_100lt_NYuron*(($tank_100lt_NYvighil/100)+1)*(((($tank_100lt_NYsvet/5)*33)/100)+1);
+$tank_62_RE=$tank_62_Ruron1*(($tank_62_Rvighil1/100)+1);
+$tank_62_NE=$tank_62_NYuron*(($tank_62_NYvighil/100)+1);
+$tank_907_RE=$tank_907_Ruron1*(($tank_907_Rvighil1/100)+1);
+$tank_907_NE=$tank_907_NYuron*(($tank_907_NYvighil/100)+1);
+$tank_140_RE=$tank_140_Ruron1*(($tank_140_Rvighil1/100)+1);
+$tank_140_NE=$tank_140_NYuron*(($tank_140_NYvighil/100)+1);
+$tank_430y_RE=$tank_430y_Ruron1*(($tank_430y_Rvighil1/100)+1);
+$tank_430y_NE=$tank_430y_NYuron*(($tank_430y_NYvighil/100)+1);
+$tank_k91_RE=$tank_k91_Ruron1*(($tank_k91_Rvighil1/100)+1);
+$tank_k91_NE=$tank_k91_NYuron*(($tank_k91_NYvighil/100)+1);
+$tank_t22_RE=$tank_t22_Ruron1*(($tank_t22_Rvighil1/100)+1);
+$tank_t22_NE=$tank_t22_NYuron*(($tank_t22_NYvighil/100)+1);
+$tank_is4_RE=$tank_is4_Ruron1*(($tank_is4_Rvighil1/100)+1);
+$tank_is4_NE=$tank_is4_NYuron*(($tank_is4_NYvighil/100)+1);
+$tank_is7_RE=$tank_is7_Ruron1*(($tank_is7_Rvighil1/100)+1);
+$tank_is7_NE=$tank_is7_NYuron*(($tank_is7_NYvighil/100)+1);
+$tank_705a_RE=$tank_705a_Ruron1*(($tank_705a_Rvighil1/100)+1);
+$tank_705a_NE=$tank_705a_NYuron*(($tank_705a_NYvighil/100)+1);
+$tank_277_RE=$tank_277_Ruron1*(($tank_277_Rvighil1/100)+1);
+$tank_277_NE=$tank_277_NYuron*(($tank_277_NYvighil/100)+1);
+$tank_st2_RE=$tank_st2_Ruron1*(($tank_st2_Rvighil1/100)+1);
+$tank_st2_NE=$tank_st2_NYuron*(($tank_st2_NYvighil/100)+1);
+$tank_279_RE=$tank_279_Ruron1*(($tank_279_Rvighil1/100)+1);
+$tank_279_NE=$tank_279_NYuron*(($tank_279_NYvighil/100)+1);
+$tank_260_RE=$tank_260_Ruron1*(($tank_260_Rvighil1/100)+1);
+$tank_260_NE=$tank_260_NYuron*(($tank_260_NYvighil/100)+1);
+$tank_268_RE=$tank_268_Ruron1*1.3;
+$tank_268_NE=$tank_268_NYuron*1.3;
+$tank_2684_RE=$tank_2684_Ruron1*1.3;
+$tank_2684_NE=$tank_2684_NYuron*1.3;
+$tank_261_RE=$tank_261_Ruron1*1.3;
+$tank_261_NE=$tank_261_NYuron*1.3;
+$tank_rhm_RE=$tank_rhm_Ruron1*(($tank_rhm_Rvighil1/100)+1)*(((($tank_rhm_Rsvet1/5)*33)/100)+1);
+$tank_rhm_NE=$tank_rhm_NYuron*(($tank_rhm_NYvighil/100)+1)*(((($tank_rhm_NYsvet/5)*33)/100)+1);
+$tank_e50_RE=$tank_e50_Ruron1*(($tank_e50_Rvighil1/100)+1);
+$tank_e50_NE=$tank_e50_NYuron*(($tank_e50_NYvighil/100)+1);
+$tank_leopard_RE=$tank_leopard_Ruron1*(($tank_leopard_Rvighil1/100)+1);
+$tank_leopard_NE=$tank_leopard_NYuron*(($tank_leopard_NYvighil/100)+1);
+$tank_maus_RE=$tank_maus_Ruron1*(($tank_maus_Rvighil1/100)+1);
+$tank_maus_NE=$tank_maus_NYuron*(($tank_maus_NYvighil/100)+1);
+$tank_e100_RE=$tank_e100_Ruron1*(($tank_e100_Rvighil1/100)+1);
+$tank_e100_NE=$tank_e100_NYuron*(($tank_e100_NYvighil/100)+1);
+$tank_PZ_RE=$tank_PZ_Ruron1*(($tank_PZ_Rvighil1/100)+1);
+$tank_PZ_NE=$tank_PZ_NYuron*(($tank_PZ_NYvighil/100)+1);
+$tank_vk72_RE=$tank_vk72_Ruron1*(($tank_vk72_Rvighil1/100)+1);
+$tank_vk72_NE=$tank_vk72_NYuron*(($tank_vk72_NYvighil/100)+1);
+$tank_jgE100_RE=$tank_jgE100_Ruron1*1.3;
+$tank_jgE100_NE=$tank_jgE100_NYuron*1.3;
+$tank_gril_RE=$tank_gril_Ruron1*1.3;
+$tank_gril_NE=$tank_gril_NYuron*1.3;
+$tank_gwe_RE=$tank_gwe_Ruron1*1.3;
+$tank_gwe_NE=$tank_gwe_NYuron*1.3;
+$tank_sheridan_RE=$tank_sheridan_Ruron1*(($tank_sheridan_Rvighil1/100)+1)*(((($tank_sheridan_Rsvet1/5)*33)/100)+1);
+$tank_sheridan_NE=$tank_sheridan_NYuron*(($tank_sheridan_NYvighil/100)+1)*(((($tank_sheridan_NYsvet/5)*33)/100)+1);
+$tank_patton_RE=$tank_patton_Ruron1*(($tank_patton_Rvighil1/100)+1);
+$tank_patton_NE=$tank_patton_NYuron*(($tank_patton_NYvighil/100)+1);
+$tank_m60_RE=$tank_m60_Ruron1*(($tank_m60_Rvighil1/100)+1);
+$tank_m60_NE=$tank_m60_NYuron*(($tank_m60_NYvighil/100)+1);
+$tank_t95e6_RE=$tank_t95e6_Ruron1*(($tank_t95e6_Rvighil1/100)+1);
+$tank_t95e6_NE=$tank_t95e6_NYuron*(($tank_t95e6_NYvighil/100)+1);
+$tank_e5_RE=$tank_e5_Ruron1*(($tank_e5_Rvighil1/100)+1);
+$tank_e5_NE=$tank_e5_NYuron*(($tank_e5_NYvighil/100)+1);
+$tank_t57heavy_RE=$tank_t57heavy_Ruron1*(($tank_t57heavy_Rvighil1/100)+1);
+$tank_t57heavy_NE=$tank_t57heavy_NYuron*(($tank_t57heavy_NYvighil/100)+1);
+$tank_e4_RE=$tank_e4_Ruron1*1.3;
+$tank_e4_NE=$tank_e4_NYuron*1.3;
+$tank_e3_RE=$tank_e3_Ruron1*1.3;
+$tank_e3_NE=$tank_e3_NYuron*1.3;
+$tank_t92_RE=$tank_t92_Ruron1*1.3;
+$tank_t92_NE=$tank_t92_NYuron*1.3;
+$tank_wz1321_RE=$tank_wz1321_Ruron1*(($tank_wz1321_Rvighil1/100)+1)*(((($tank_wz1321_Rsvet1/5)*33)/100)+1);
+$tank_wz1321_NE=$tank_wz1321_NYuron*(($tank_wz1321_NYvighil/100)+1)*(((($tank_wz1321_NYsvet/5)*33)/100)+1);
+$tank_121_RE=$tank_121_Ruron1*(($tank_121_Rvighil1/100)+1);
+$tank_121_NE=$tank_121_NYuron*(($tank_121_NYvighil/100)+1);
+$tank_121b_RE=$tank_121b_Ruron1*(($tank_121b_Rvighil1/100)+1);
+$tank_121b_NE=$tank_121b_NYuron*(($tank_121b_NYvighil/100)+1);
+$tank_113_RE=$tank_113_Ruron1*(($tank_113_Rvighil1/100)+1);
+$tank_113_NE=$tank_113_NYuron*(($tank_113_NYvighil/100)+1);
+$tank_wz111a_RE=$tank_wz111a_Ruron1*(($tank_wz111a_Rvighil1/100)+1);
+$tank_wz111a_NE=$tank_wz111a_NYuron*(($tank_wz111a_NYvighil/100)+1);
+$tank_wz113_RE=$tank_wz113_Ruron1*1.3;
+$tank_wz113_NE=$tank_wz113_NYuron*1.3;
+$tank_13105_RE=$tank_13105_Ruron1*(($tank_13105_Rvighil1/100)+1)*(((($tank_13105_Rsvet1/5)*33)/100)+1);
+$tank_13105_NE=$tank_13105_NYuron*(($tank_13105_NYvighil/100)+1)*(((($tank_13105_NYsvet/5)*33)/100)+1);
+$tank_ebr_RE=$tank_ebr_Ruron1*(($tank_ebr_Rvighil1/100)+1)*(((($tank_ebr_Rsvet1/5)*33)/100)+1);
+$tank_ebr_NE=$tank_ebr_NYuron*(($tank_ebr_NYvighil/100)+1)*(((($tank_ebr_NYsvet/5)*33)/100)+1);
+$tank_bat25_RE=$tank_bat25_Ruron1*(($tank_bat25_Rvighil1/100)+1);
+$tank_bat25_NE=$tank_bat25_NYuron*(($tank_bat25_NYvighil/100)+1);
+$tank_30b_RE=$tank_30b_Ruron1*(($tank_30b_Rvighil1/100)+1);
+$tank_30b_NE=$tank_30b_NYuron*(($tank_30b_NYvighil/100)+1);
+$tank_50b_RE=$tank_50b_Ruron1*(($tank_50b_Rvighil1/100)+1);
+$tank_50b_NE=$tank_50b_NYuron*(($tank_50b_NYvighil/100)+1);
+$tank_amxm4_RE=$tank_amxm4_Ruron1*(($tank_amxm4_Rvighil1/100)+1);
+$tank_amxm4_NE=$tank_amxm4_NYuron*(($tank_amxm4_NYvighil/100)+1);
+$tank_50foch_RE=$tank_50foch_Ruron1*1.3;
+$tank_50foch_NE=$tank_50foch_NYuron*1.3;
+$tank_50fochB_RE=$tank_50fochB_Ruron1*1.3;
+$tank_50fochB_NE=$tank_50fochB_NYuron*1.3;
+$tank_Bat155_RE=$tank_Bat155_Ruron1*1.3;
+$tank_Bat155_NE=$tank_Bat155_NYuron*1.3;
+$tank_manticor_RE=$tank_manticor_Ruron1*(($tank_manticor_Rvighil1/100)+1)*(((($tank_manticor_Rsvet1/5)*33)/100)+1);
+$tank_manticor_NE=$tank_manticor_NYuron*(($tank_manticor_NYvighil/100)+1)*(((($tank_manticor_NYsvet/5)*33)/100)+1);
+$tank_centruion_RE=$tank_centruion_Ruron1*(($tank_centruion_Rvighil1/100)+1);
+$tank_centruion_NE=$tank_centruion_NYuron*(($tank_centruion_NYvighil/100)+1);
+$tank_fv215b_RE=$tank_fv215b_Ruron1*(($tank_fv215b_Rvighil1/100)+1);
+$tank_fv215b_NE=$tank_fv215b_NYuron*(($tank_fv215b_NYvighil/100)+1);
+$tank_SuperConq_RE=$tank_SuperConq_Ruron1*(($tank_SuperConq_Rvighil1/100)+1);
+$tank_SuperConq_NE=$tank_SuperConq_NYuron*(($tank_SuperConq_NYvighil/100)+1);
+$tank_t95fv4201_RE=$tank_t95fv4201_Ruron1*(($tank_t95fv4201_Rvighil1/100)+1);
+$tank_t95fv4201_NE=$tank_t95fv4201_NYuron*(($tank_t95fv4201_NYvighil/100)+1);
+$tank_fv215b183_RE=$tank_fv215b183_Ruron1*1.3;
+$tank_fv215b183_NE=$tank_fv215b183_NYuron*1.3;
+$tank_fv4005_RE=$tank_fv4005_Ruron1*1.3;
+$tank_fv4005_NE=$tank_fv4005_NYuron*1.3;
+$tank_fv217badger_RE=$tank_fv217badger_Ruron1*1.3;
+$tank_fv217badger_NE=$tank_fv217badger_NYuron*1.3;
+$tank_Conq_RE=$tank_Conq_Ruron1*1.3;
+$tank_Conq_NE=$tank_Conq_NYuron*1.3;
+$tank_stb1_RE=$tank_stb1_Ruron1*(($tank_stb1_Rvighil1/100)+1);
+$tank_stb1_NE=$tank_stb1_NYuron*(($tank_stb1_NYvighil/100)+1);
+$tank_type5heavy_RE=$tank_type5heavy_Ruron1*(($tank_type5heavy_Rvighil1/100)+1);
+$tank_type5heavy_NE=$tank_type5heavy_NYuron*(($tank_type5heavy_NYvighil/100)+1);
+$tank_vz55_RE=$tank_vz55_Ruron1*(($tank_vz55_Rvighil1/100)+1);
+$tank_vz55_NE=$tank_vz55_NYuron*(($tank_vz55_NYvighil/100)+1);
+$tank_tvp_RE=$tank_tvp_Ruron1*(($tank_tvp_Rvighil1/100)+1);
+$tank_tvp_NE=$tank_tvp_NYuron*(($tank_tvp_NYvighil/100)+1);
+$tank_udes1516_RE=$tank_udes1516_Ruron1*(($tank_udes1516_Rvighil1/100)+1);
+$tank_udes1516_NE=$tank_udes1516_NYuron*(($tank_udes1516_NYvighil/100)+1);
+$tank_kran_RE=$tank_kran_Ruron1*(($tank_kran_Rvighil1/100)+1);
+$tank_kran_NE=$tank_kran_NYuron*(($tank_kran_NYvighil/100)+1);
+$tank_strv_RE=$tank_strv_Ruron1*1.3;
+$tank_strv_NE=$tank_strv_NYuron*1.3;
+$tank_cs63_RE=$tank_cs63_Ruron1*(($tank_cs63_Rvighil1/100)+1);
+$tank_cs63_NE=$tank_cs63_NYuron*(($tank_cs63_NYvighil/100)+1);
+$tank_60tp_RE=$tank_60tp_Ruron1*(($tank_60tp_Rvighil1/100)+1);
+$tank_60tp_NE=$tank_60tp_NYuron*(($tank_60tp_NYvighil/100)+1);
+$tank_progetto_RE=$tank_progetto_Ruron1*(($tank_progetto_Rvighil1/100)+1);
+$tank_progetto_NE=$tank_progetto_NYuron*(($tank_progetto_NYvighil/100)+1);
+$tank_carro_RE=$tank_carro_Ruron1*(($tank_carro_Rvighil1/100)+1);
+$tank_carro_NE=$tank_carro_NYuron*(($tank_carro_NYvighil/100)+1);
+$tank_RINOCERONTE_RE=$tank_RINOCERONTE_Ruron1*(($tank_RINOCERONTE_Rvighil1/100)+1);
+$tank_RINOCERONTE_NE=$tank_RINOCERONTE_NYuron*(($tank_RINOCERONTE_NYvighil/100)+1);
+?>
+<?php
+require_once "login2.php";
+if($_COOKIE['hist']=='index'){
+     header('Location: https://cyberfan.pro/');
+    }
+    define('YY', $_COOKIE['hist']);
+    header('Location: https://cyberfan.pro/'. YY);
+?>
